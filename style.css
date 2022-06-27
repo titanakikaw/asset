@@ -1,0 +1,62 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;500&display=swap");
+* {
+  font-family: "Roboto Slab", serif;
+  font-size: 14px;
+}
+* button {
+  border-radius: 2px !important;
+}
+
+ul li {
+  list-style: none;
+}
+ul li a {
+  text-decoration: none;
+  color: black;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+
+.offcanvas.offcanvas-start {
+  transform: translateX(-85%);
+  visibility: visible;
+  transition: 0.4s ease;
+  width: 300px;
+}
+.offcanvas.offcanvas-start i {
+  cursor: pointer;
+}
+
+.input-group-text {
+  font-size: 10px !important;
+}
+
+button {
+  font-size: 11px !important;
+}
+
+.table {
+  border-radius: 5px;
+}
+.table th, .table td {
+  font-size: 10px;
+  font-weight: normal;
+}
+
+.table-actions button i {
+  color: rgb(30, 129, 221) !important;
+}
+
+.select2-selection__rendered {
+  font-size: 9px;
+}
+
+.select2-results__option {
+  font-size: 9px;
+}
+
+.select2-search__field {
+  font-size: 10px;
+}
+
+/*# sourceMappingURL=style.css.map */
