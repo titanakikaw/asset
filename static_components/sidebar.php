@@ -4,8 +4,27 @@
         <i class="fa-solid fa-bars " data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop"></i>
     </div>
     <div class="offcanvas-body">
-        <ul>
-            <li><a href="">Assets</a></li>
+        <ul style="width:200px">
+            <li style="padding: 8px 0;">
+                <a href="assets.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-boxes-stacked"></i>&nbsp; Physical Count</a>
+            </li>
+            <li style="padding: 8px 0;">
+                <a href="assets.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-warehouse"></i>&nbsp; Assets</a>
+            </li>
+            <hr>
+            <li style="padding: 8px 0;">
+                <a href="assets.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-building"></i>&nbsp; Departments</a>
+            </li>
+            <li style="padding: 8px 0;">
+                <a href="assets.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-location-dot"></i>&nbsp; Locations</a>
+            </li>
+            <li style="padding: 8px 0;">
+                <a href="assets.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-users"></i>&nbsp; Employees</a>
+            </li>
+            <li style="padding: 8px 0;">
+                <a href="assets.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-file-circle-check"></i>&nbsp; Reports</a>
+            </li>
         </ul>
+
     </div>
 </div>
