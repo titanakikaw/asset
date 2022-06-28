@@ -13,16 +13,20 @@
             </li>
             <hr>
             <li style="padding: 8px 0;">
-                <a href="assets.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-building"></i>&nbsp; Departments</a>
+                <a href="departments.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-building"></i>&nbsp; Departments</a>
             </li>
             <li style="padding: 8px 0;">
-                <a href="assets.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-location-dot"></i>&nbsp; Locations</a>
+                <a href="locations.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-location-dot"></i>&nbsp; Locations</a>
             </li>
             <li style="padding: 8px 0;">
-                <a href="assets.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-users"></i>&nbsp; Employees</a>
+                <a href="employees.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-users"></i>&nbsp; Employees</a>
             </li>
             <li style="padding: 8px 0;">
                 <a href="assets.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-file-circle-check"></i>&nbsp; Reports</a>
+            </li>
+            <hr>
+            <li style="padding: 8px 0;">
+                <a href="assets.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-file-import"></i>&nbsp; Batch Upload</a>
             </li>
         </ul>
 

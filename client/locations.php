@@ -5,9 +5,9 @@ require('../static_components/header.php');
     <div class="row">
         <div class="col">
             <div class="d-grid gap-2 d-md-flex justify-content-md-start table-actions">
-                <a href="newasset.php" class="btn" type="button" style="border-radius: 2px; background-color:#f3f3f3"><i class="fa-solid fa-plus"></i> &nbsp; New Department</a>
-                <button class="btn" type="button" style="border-radius: 2px; background-color:#f3f3f3"><i class="fa-solid fa-pencil"></i> &nbsp; Edit Department</button>
-                <button class="btn" type="button" style="border-radius: 2px; background-color:#f3f3f3"><i class="fa-solid fa-trash"></i> &nbsp; Delete Department</button>
+                <a href="newasset.php" class="btn" type="button" style="border-radius: 2px; background-color:#f3f3f3"><i class="fa-solid fa-plus"></i> &nbsp; New Location</a>
+                <button class="btn" type="button" style="border-radius: 2px; background-color:#f3f3f3"><i class="fa-solid fa-pencil"></i> &nbsp; Edit Location</button>
+                <button class="btn" type="button" style="border-radius: 2px; background-color:#f3f3f3"><i class="fa-solid fa-trash"></i> &nbsp; Delete Location</button>
             </div>
         </div>
 
@@ -20,7 +20,7 @@ require('../static_components/header.php');
             <thead style="background: #f3f3f3;">
                 <tr>
                     <th><input type="checkbox"></th>
-                    <th>Department Code</th>
+                    <th>Location Code</th>
                     <th>Description</th>
                 </tr>
             </thead>
