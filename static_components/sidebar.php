@@ -1,10 +1,13 @@
 <div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel">
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="staticBackdropLabel">Menu</h5>
+        <h5 class="offcanvas-title" id="staticBackdropLabel">DRISMTECH</h5>
         <i class="fa-solid fa-bars " data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop"></i>
     </div>
     <div class="offcanvas-body">
         <ul style="width:200px">
+            <li style="padding: 8px 0;">
+                <a href="physicalcount.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-chart-line"></i></i>&nbsp; Dashboard</a>
+            </li>
             <li style="padding: 8px 0;">
                 <a href="physicalcount.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-boxes-stacked"></i>&nbsp; Physical Count</a>
             </li>
