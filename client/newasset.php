@@ -51,6 +51,14 @@ require('../static_components/header.php');
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">Status :</span>
+                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                        </div>
+                    </div>
+                </div>
                 <hr>
                 <div class="row">
                     <div class="col">

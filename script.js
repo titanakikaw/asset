@@ -13,3 +13,4 @@ $(document).ready(() => {
         // dataTables_infos[index].style.textTransform = "Uppercase"
     });
 })
+

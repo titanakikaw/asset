@@ -6,7 +6,7 @@
     <div class="offcanvas-body">
         <ul style="width:200px">
             <li style="padding: 8px 0;">
-                <a href="assets.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-boxes-stacked"></i>&nbsp; Physical Count</a>
+                <a href="physicalcount.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-boxes-stacked"></i>&nbsp; Physical Count</a>
             </li>
             <li style="padding: 8px 0;">
                 <a href="assets.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-warehouse"></i>&nbsp; Assets</a>
@@ -27,6 +27,12 @@
             <hr>
             <li style="padding: 8px 0;">
                 <a href="assets.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-file-import"></i>&nbsp; Batch Upload</a>
+            </li>
+            <li style="padding: 8px 0;">
+                <a href="assets.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-gears"></i>&nbsp; Settings</a>
+            </li>
+            <li style="padding: 8px 0;">
+                <a href="assets.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-power-off"></i>&nbsp; Exit</a>
             </li>
         </ul>
 
