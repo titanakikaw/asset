@@ -9,12 +9,12 @@ class dbConnection
     private $servername = "(local)";
     private $username = "private";
     private $password = "123";
-    private $database = "DRISM_ASSET_MONITORING ";
+    private $database = "DRISM_ASSET_MONITORING";
 
     function conn()
     {
         try {
-            $conn = new PDO("mysql:Server=$this->servername;dbname=monitoringsys", $this->username, $this->password, [True]);
+            $conn = new PDO("mysql:Server=$this->servername;dbname=$this->database", $this->username, $this->password, [True]);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $conn;
         } catch (PDOException $e) {

@@ -1,13 +1,11 @@
 <?php
 require('../model/clsStandard.php');
 require('../model/clsConnection.php');
-
-
 switch($_POST['action']) {
     case 'new':
         $col = $_POST['data'];
         $clsController = new clsController($col,'location');
-        json_encode($clsController->add());
+        echo json_encode($clsController->add());
         break;
     case 'delete':
         break;
@@ -19,7 +17,14 @@ switch($_POST['action']) {
         break;
 
     case 'table':
+       
         $clsController = new clsController('','location');
-        json_encode($clsController->viewlist());
-        break;
+        echo json_encode($clsController->viewlist());
+        // if($clsController->viewlist()){
+            
+        // }else{
+        //     json_encode(false);
+        // }
+
+        // break;
 }
