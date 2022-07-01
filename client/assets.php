@@ -137,13 +137,13 @@ require('../static_components/header.php');
                 <div class="col">
                     <div class="input-group input-group-sm mb-3">
                         <span class="input-group-text str-date" id="inputGroup-sizing-sm">Start Date :</span>
-                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                        <input type="text" class="form-control" id="assetdteFrom" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                     </div>
                 </div>
                 <div class="col">
                     <div class="input-group input-group-sm mb-3">
                         <span class="input-group-text" id="inputGroup-sizing-sm">End Date :</span>
-                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                        <input type="text" class="form-control" id="assetdteTo" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                     </div>
                 </div>
             </div>
@@ -151,7 +151,9 @@ require('../static_components/header.php');
                 <div class="col">
                     <div class="input-group input-group-sm mb-3">
                         <span class="input-group-text" id="inputGroup-sizing-sm">Assigned Employee :</span>
-                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                        <select  class="form-select" id="assgnEmp">
+                            <option></option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -185,6 +187,13 @@ require('../static_components/footer.php');
                 dropdownParent: $(".filter-asset")
             })
         })
-        $('.str-date').datePicker()
+
+        $('#assetdteFrom').datepicker({
+            format : "mm-dd-yyyy"
+        })
+        $('#assetdteTo').datepicker({
+            format : "mm-dd-yyyy"
+        })
+
     })
 </script>

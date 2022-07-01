@@ -7,6 +7,58 @@ require('../static_components/header.php');
             <div class="row">
                 <!-- Asset Information -->
                 <div class="col-7">
+                    
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Location :</span>
+                                <select class="form-select" id="location">
+                                    <option selected>Open this select menu</option>
+                                    <option value="1">Operational</option>
+                                    <option value="2">Non - Operational</option>
+                                    <option value="3">Three</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Department :</span>
+                                <select class="form-select" id="dept">
+                                    <option selected>Open this select menu</option>
+                                    <option value="1">Operational</option>
+                                    <option value="2">Non - Operational</option>
+                                    <option value="3">Three</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Status :</span>
+                                <select class="form-select" id="status">
+                                    <option selected>Open this select menu</option>
+                                    <option value="1">Operational</option>
+                                    <option value="2">Non - Operational</option>
+                                    <option value="3">Three</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Category :</span>
+                                <select class="form-select" id="cat">
+                                    <option selected>Open this select menu</option>
+                                    <option value="1">Operational</option>
+                                    <option value="2">Non - Operational</option>
+                                    <option value="3">Three</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                       
+                    </div>
                     <div class="row">
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
@@ -39,53 +91,16 @@ require('../static_components/header.php');
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col">
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">Location :</span>
-                                <select class="form-select" id="location">
-                                    <option selected>Open this select menu</option>
-                                    <option value="1">Operational</option>
-                                    <option value="2">Non - Operational</option>
-                                    <option value="3">Three</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">Department :</span>
-                                <select class="form-select" id="dept">
-                                    <option selected>Open this select menu</option>
-                                    <option value="1">Operational</option>
-                                    <option value="2">Non - Operational</option>
-                                    <option value="3">Three</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">Status :</span>
-                                <select class="form-select" id="status">
-                                    <option selected>Open this select menu</option>
-                                    <option value="1">Operational</option>
-                                    <option value="2">Non - Operational</option>
-                                    <option value="3">Three</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
                         <div class="col-6">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Purchase Date Warranty :</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                <input type="text" class="form-control" aria-label="Sizing example input" id="assetdteFrom" name="[txt][dteFrom]" aria-describedby="inputGroup-sizing-sm">
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">End Warranty Date :</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="assetdteTo" name="[txt][dteTo]">
                             </div>
                         </div>
                     </div>
@@ -107,7 +122,7 @@ require('../static_components/header.php');
                     <div class="row">
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">Useful Lifecycle:</span>
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Useful Lifecycle (months):</span>
                                 <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="[txt][usefullife]" id="txtusefullife">
                             </div>
                         </div>
@@ -118,7 +133,7 @@ require('../static_components/header.php');
                         </div>
                         <div class="col">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="byAmount" onclick="salvageValueBy()">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="byAmount" onclick="salvageValueBy()"  onkeyup="calcDep()">
                                 <label class="form-check-label" for="flexRadioDefault1">
                                     By Amount
                                 </label>
@@ -126,7 +141,7 @@ require('../static_components/header.php');
                         </div>
                         <div class="col">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="byPercentage" onclick=" salvageValueBy()">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="byPercentage" onclick=" salvageValueBy(),calcDep()">
                                 <label class="form-check-label" for="flexRadioDefault1">
                                     By Percentage
                                 </label>
@@ -137,7 +152,7 @@ require('../static_components/header.php');
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">By Amount:</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="txtByAmount" onkeyup="moneyFormat(this, 'currency')" onchange="handleChangeMoney(this)" disabled required>
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="txtByAmount" onkeyup="moneyFormat(this, 'currency'),calcDep()" onchange="handleChangeMoney(this)" disabled required>
                             </div>
                         </div>
                         <div class="col">
@@ -150,7 +165,7 @@ require('../static_components/header.php');
                     <div class="row">
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">Accumulated Depreciation :</span>
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Annual Depreciation :</span>
                                 <input type="text" disabled class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="[txt][depreciation]" id="txtdepreciation">
                             </div>
                         </div>
@@ -158,8 +173,8 @@ require('../static_components/header.php');
                     <div class="row">
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">Net Book Value :</span>
-                                <input type="text" disabled class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                <!-- <span class="input-group-text" id="inputGroup-sizing-sm">Net Book Value :</span>
+                                <input type="text" disabled class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"> -->
                             </div>
                         </div>
                     </div>
@@ -177,28 +192,15 @@ require('../static_components/header.php');
                         <div class="col">
                             <div class="mb-3">
                                 <label for="formFileMultiple" class="form-label">Upload Asset Images :</label>
-                                <input class="form-control" type="file" id="formFileMultiple" multiple style="font-size: 10px;">
+                                <input class="form-control" type="file" id="formFileMultiple" multiple style="font-size: 10px;" onchange="previewImages()">
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
-                            <div class="d-flex justify-content-start">
-                                <div class="">
-                                    <img src="../images/img-3785.webp" class="img-thumbnail" alt="...">
-                                </div>
-                                <div class="">
-                                    <img src="../images/img-3785.webp" class="img-thumbnail" alt="...">
-                                </div>
-                                <div class="">
-                                    <img src="../images/img-3785.webp" class="img-thumbnail" alt="...">
-                                </div>
-                                <div class="">
-                                    <img src="../images/img-3785.webp" class="img-thumbnail" alt="...">
-                                </div>
-                                <div class="">
-                                    <img src="../images/img-3785.webp" class="img-thumbnail" alt="...">
-                                </div>
+                            <div class="d-flex justify-content-evenly img-container" style="background-color: white; padding: 5px">
+                    
+                               
                             </div>
                         </div>
                     </div>
@@ -335,6 +337,13 @@ require('../static_components/footer.php');
         $('#location').select2()
         $('#dept').select2()
         $('#status').select2()
+        $('#cat').select2()
+        $('#assetdteFrom').datepicker({
+            format : "mm-dd-yyyy"
+        })
+        $('#assetdteTo').datepicker({
+            format : "mm-dd-yyyy"
+        })
 
 
     })
@@ -364,6 +373,7 @@ require('../static_components/footer.php');
     }
 
     function handleChangeMoney(field) {
+
         let originalValue = field.value
         if (originalValue.replace(" PHP ", '') == '') {
             field.value = " PHP " + 0
@@ -411,11 +421,38 @@ require('../static_components/footer.php');
         assetAmount = parseFloat(assetAmount.replace(" PHP ", ''));
         SalvageValue = parseFloat(SalvageValue.replace(" PHP ", ''));
 
+        if(assetAmount == ''){
+            assetAmount = 0
+        }
+        if(SalvageValue == ''){
+            SalvageValue = 0
+        }
+        if(UsefulLife == ''){
+            UsefulLife = 0
+        }
+
+
         const deprecialbleCost = assetAmount - SalvageValue;
         const annualDepreciation = deprecialbleCost / UsefulLife;
 
-
         Depreciation.val(annualDepreciation)
         moneyFormat($('#txtdepreciation')[0], 'currency')
+    }
+
+    function previewImages(){
+        const files = $('#formFileMultiple');
+        const Images = files[0].files
+        const container = $('.img-container');
+        container.empty()
+        Object.keys(Images).map((index) => {
+            let img = Images[index];
+            let newImg = document.createElement('img');
+            newImg.classList = 'rounded float-start '
+            newImg.style.width = "100px"
+            newImg.style.height = "100px"
+            newImg.style.border = "1px solid #f3f3f3"
+            newImg.src = URL.createObjectURL(img)
+            container.append(newImg)
+        })
     }
 </script>

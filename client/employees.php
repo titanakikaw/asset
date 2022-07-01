@@ -25,15 +25,11 @@ require('../static_components/header.php');
                     <th>Position</th>
                     <th>Department</th>
                     <th>Location</th>
-                    <th>Username</th>
-                    <th>Password</th>
                 </tr>
             </thead>
             <div class="tbody">
                 <tr>
                     <td><input type="checkbox"></td>
-                    <td>test</td>
-                    <td>test</td>
                     <td>test</td>
                     <td>test</td>
                     <td>test</td>
@@ -111,7 +107,7 @@ require('../static_components/header.php');
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col">
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing-sm">Username :</span>
@@ -130,7 +126,7 @@ require('../static_components/header.php');
                             <input type="password" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

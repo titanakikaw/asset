@@ -19,6 +19,9 @@
                 <a href="departments.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-building"></i>&nbsp; Departments</a>
             </li>
             <li style="padding: 8px 0;">
+                <a href="category.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-building"></i>&nbsp; Category</a>
+            </li>
+            <li style="padding: 8px 0;">
                 <a href="locations.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-location-dot"></i>&nbsp; Locations</a>
             </li>
             <li style="padding: 8px 0;">

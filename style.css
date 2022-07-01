@@ -20,6 +20,10 @@ input [type=file] {
   font-size: 11px;
 }
 
+.input-group {
+  flex-wrap: nowrap !important;
+}
+
 ul li {
   list-style: none;
 }
