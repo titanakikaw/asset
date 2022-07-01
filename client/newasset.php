@@ -7,12 +7,11 @@ require('../static_components/header.php');
             <div class="row">
                 <!-- Asset Information -->
                 <div class="col-7">
-                    
                     <div class="row">
                         <div class="col-6">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Location :</span>
-                                <select class="form-select" id="location">
+                                <select class="form-select" id="location" name="data[loc_code]">
                                     <option selected>Open this select menu</option>
                                     <option value="1">Operational</option>
                                     <option value="2">Non - Operational</option>
@@ -23,7 +22,7 @@ require('../static_components/header.php');
                         <div class="col-6">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Department :</span>
-                                <select class="form-select" id="dept">
+                                <select class="form-select" id="dept" name="data[dept_code]">
                                     <option selected>Open this select menu</option>
                                     <option value="1">Operational</option>
                                     <option value="2">Non - Operational</option>
@@ -36,7 +35,7 @@ require('../static_components/header.php');
                         <div class="col-6">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Status :</span>
-                                <select class="form-select" id="status">
+                                <select class="form-select" id="status" name="data[status_code]">
                                     <option selected>Open this select menu</option>
                                     <option value="1">Operational</option>
                                     <option value="2">Non - Operational</option>
@@ -46,7 +45,7 @@ require('../static_components/header.php');
                         </div>
                         <div class="col-6">
                             <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">Category :</span>
+                                <span class="input-group-text" id="inputGroup-sizing-sm" name="data[cat_code]">Category :</span>
                                 <select class="form-select" id="cat">
                                     <option selected>Open this select menu</option>
                                     <option value="1">Operational</option>
@@ -57,13 +56,13 @@ require('../static_components/header.php');
                         </div>
                     </div>
                     <div class="row">
-                       
+
                     </div>
                     <div class="row">
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Asset Code :</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[assetno]">
                             </div>
                         </div>
 
@@ -72,7 +71,7 @@ require('../static_components/header.php');
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Asset Description :</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[description]">
                             </div>
                         </div>
                     </div>
@@ -80,13 +79,13 @@ require('../static_components/header.php');
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Model No :</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[modelno]">
                             </div>
                         </div>
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Serial No :</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[serialno]">
                             </div>
                         </div>
                     </div>
@@ -94,13 +93,13 @@ require('../static_components/header.php');
                         <div class="col-6">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Purchase Date Warranty :</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" id="assetdteFrom" name="[txt][dteFrom]" aria-describedby="inputGroup-sizing-sm">
+                                <input type="text" class="form-control" aria-label="Sizing example input" id="assetdteFrom" name="[txt][dteFrom]" aria-describedby="inputGroup-sizing-sm" name="data[dtefrom]">
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">End Warranty Date :</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="assetdteTo" name="[txt][dteTo]">
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="assetdteTo" name="data[dteto]">
                             </div>
                         </div>
                     </div>
@@ -109,13 +108,13 @@ require('../static_components/header.php');
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Amount :</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="[txt][assetAmount]" id="txtAssetAmount" onkeyup="moneyFormat(this, 'currency')" required>
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[cost]" id="txtAssetAmount" onkeyup="moneyFormat(this, 'currency')" required>
                             </div>
                         </div>
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Quantity :</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[qty]">
                             </div>
                         </div>
                     </div>
@@ -123,7 +122,7 @@ require('../static_components/header.php');
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Useful Lifecycle (months):</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="[txt][usefullife]" id="txtusefullife">
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[usefullife]" id="txtusefullife">
                             </div>
                         </div>
                     </div>
@@ -133,7 +132,7 @@ require('../static_components/header.php');
                         </div>
                         <div class="col">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="byAmount" onclick="salvageValueBy()"  onkeyup="calcDep()">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="byAmount" onclick="salvageValueBy()" onkeyup="calcDep()">
                                 <label class="form-check-label" for="flexRadioDefault1">
                                     By Amount
                                 </label>
@@ -152,13 +151,13 @@ require('../static_components/header.php');
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">By Amount:</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="txtByAmount" onkeyup="moneyFormat(this, 'currency'),calcDep()" onchange="handleChangeMoney(this)" disabled required>
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="txtByAmount" onkeyup="moneyFormat(this, 'currency'),calcDep()" onchange="handleChangeMoney(this)" name="data[salvalue]" disabled required>
                             </div>
                         </div>
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">By Percentage:</span>
-                                <input type="text" class="form-control" onkeyup="moneyFormat(this, 'percentage'),calcPerAmount(),calcDep()" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="txtByPercent" disabled>
+                                <input type="text" class="form-control" onkeyup="moneyFormat(this, 'percentage'),calcPerAmount(),calcDep()" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="txtByPercent" disabled name="data[salpercent]">
                             </div>
                         </div>
                     </div>
@@ -166,7 +165,7 @@ require('../static_components/header.php');
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Annual Depreciation :</span>
-                                <input type="text" disabled class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="[txt][depreciation]" id="txtdepreciation">
+                                <input type="text" disabled class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="[txt][depreciation]" id="txtdepreciation" name="data[annualdep]">
                             </div>
                         </div>
                     </div>
@@ -199,8 +198,8 @@ require('../static_components/header.php');
                     <div class="row">
                         <div class="col">
                             <div class="d-flex justify-content-evenly img-container" style="background-color: white; padding: 5px">
-                    
-                               
+
+
                             </div>
                         </div>
                     </div>
@@ -339,10 +338,10 @@ require('../static_components/footer.php');
         $('#status').select2()
         $('#cat').select2()
         $('#assetdteFrom').datepicker({
-            format : "mm-dd-yyyy"
+            format: "mm-dd-yyyy"
         })
         $('#assetdteTo').datepicker({
-            format : "mm-dd-yyyy"
+            format: "mm-dd-yyyy"
         })
 
 
@@ -421,13 +420,13 @@ require('../static_components/footer.php');
         assetAmount = parseFloat(assetAmount.replace(" PHP ", ''));
         SalvageValue = parseFloat(SalvageValue.replace(" PHP ", ''));
 
-        if(assetAmount == ''){
+        if (assetAmount == '') {
             assetAmount = 0
         }
-        if(SalvageValue == ''){
+        if (SalvageValue == '') {
             SalvageValue = 0
         }
-        if(UsefulLife == ''){
+        if (UsefulLife == '') {
             UsefulLife = 0
         }
 
@@ -439,7 +438,7 @@ require('../static_components/footer.php');
         moneyFormat($('#txtdepreciation')[0], 'currency')
     }
 
-    function previewImages(){
+    function previewImages() {
         const files = $('#formFileMultiple');
         const Images = files[0].files
         const container = $('.img-container');
