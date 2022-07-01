@@ -37,30 +37,32 @@ require('../static_components/header.php');
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Category Information</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="input-group input-group-sm mb-3">
-                        <span class="input-group-text" id="inputGroup-sizing-sm">Category Code :</span>
-                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+        <form id="formCategory">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Category Information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">Category Code :</span>
+                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[cat_code]">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">Description :</span>
+                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[description]">
+                        </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="input-group input-group-sm mb-3">
-                        <span class="input-group-text" id="inputGroup-sizing-sm">Description :</span>
-                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="btnCloseModal" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnSave" onclick="save()">Save</button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save</button>
-            </div>
-        </div>
+        </form>
     </div>
 </div>
 
@@ -71,9 +73,57 @@ require('../static_components/header.php');
 require('../static_components/footer.php');
 ?>
 <script>
-    $('.asset-table').DataTable({
+    let table = $('.asset-table').DataTable({
         searching: false,
         ordering: false,
-        select: true
+        select: true,
+        "ajax": {
+            "url": "../clsController/category.php",
+            "type": "POST",
+            "Content-type": 'application/json',
+            "data": {
+                "action": "table"
+            },
+            "success": (data) => {
+                table.clear()
+                data.forEach((loc) => {
+                    table.row.add([
+                        `<input type="checkbox" id="tbldata" value="${loc['cat_code']}">`,
+                        `${loc['cat_code']}`,
+                        `${loc['description']}`,
+                    ]).draw(false)
+                })
+            },
+            "error": () => {
+                $('.asset-table tbody').empty()
+                $('.asset-table tbody').append("<tr><td colspan='3' style='text-align:center'>No Data Available</td></tr>")
+
+            }
+        }
     })
+
+
+    function save() {
+        let data = $('#formCategory').serialize()
+
+        let saveType = $('#btnSave')[0].innerText;
+        if (saveType == "Save") {
+            data = data + '&action=new'
+        } else if (saveType == "Update") {
+            data = data + '&action=update'
+        }
+        $.ajax({
+            url: "../clsController/category.php",
+            type: "POST",
+            data: data,
+            error: (error) => {
+                alertify.error('Error in saving. Please Try again').delay(1);
+            },
+            success: (data) => {
+                $('.asset-table').DataTable().ajax.reload();
+                $('#btnCloseModal').click()
+                alertify.success('Success').delay(1);
+            }
+        })
+    }
 </script>

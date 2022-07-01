@@ -25,6 +25,9 @@
                 <a href="locations.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-location-dot"></i>&nbsp; Locations</a>
             </li>
             <li style="padding: 8px 0;">
+                <a href="status.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-location-dot"></i>&nbsp; Status</a>
+            </li>
+            <li style="padding: 8px 0;">
                 <a href="employees.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-users"></i>&nbsp; Employees</a>
             </li>
             <li style="padding: 8px 0;">
