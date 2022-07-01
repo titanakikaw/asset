@@ -143,7 +143,7 @@ require('../static_components/header.php');
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">By Percentage:</span>
-                                <input type="text" class="form-control" onkeyup="moneyFormat(this, 'percentage'),calcPerAmount()" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="txtByPercent" disabled>
+                                <input type="text" class="form-control" onkeyup="moneyFormat(this, 'percentage'),calcPerAmount(),calcDep()" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="txtByPercent" disabled>
                             </div>
                         </div>
                     </div>
