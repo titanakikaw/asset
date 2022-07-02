@@ -11,7 +11,7 @@ require('../static_components/header.php');
                         <div class="col-6">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Location :</span>
-                                <select class="form-select" id="location" name="data[loc_code]">
+                                <select class="form-select" id="location" name="data[loc_code]" style="width:100%">
                                     <option selected>Open this select menu</option>
                                     <option value="1">Operational</option>
                                     <option value="2">Non - Operational</option>
@@ -21,8 +21,8 @@ require('../static_components/header.php');
                         </div>
                         <div class="col-6">
                             <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">Department :</span>
-                                <select class="form-select" id="dept" name="data[dept_code]">
+                                <span class="input-group-text" id="inputGroup-sizing-sm" >Department :</span>
+                                <select class="form-select" id="dept" name="data[dept_code]" style="width:100%">
                                     <option selected>Open this select menu</option>
                                     <option value="1">Operational</option>
                                     <option value="2">Non - Operational</option>
@@ -35,7 +35,7 @@ require('../static_components/header.php');
                         <div class="col-6">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Status :</span>
-                                <select class="form-select" id="status" name="data[status_code]">
+                                <select class="form-select" id="status" name="data[status_code]" style="width:100%">
                                     <option selected>Open this select menu</option>
                                     <option value="1">Operational</option>
                                     <option value="2">Non - Operational</option>
@@ -45,8 +45,8 @@ require('../static_components/header.php');
                         </div>
                         <div class="col-6">
                             <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm" name="data[cat_code]">Category :</span>
-                                <select class="form-select" id="cat">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Category :</span>
+                                <select class="form-select" id="cat" style="width:100%"  name="data[cat_code]">
                                     <option selected>Open this select menu</option>
                                     <option value="1">Operational</option>
                                     <option value="2">Non - Operational</option>
@@ -93,7 +93,7 @@ require('../static_components/header.php');
                         <div class="col-6">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Purchase Date Warranty :</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" id="assetdteFrom" name="[txt][dteFrom]" aria-describedby="inputGroup-sizing-sm" name="data[dtefrom]">
+                                <input type="text" class="form-control" aria-label="Sizing example input" id="assetdteFrom" aria-describedby="inputGroup-sizing-sm" name="data[dtefrom]">
                             </div>
                         </div>
                         <div class="col-6">
@@ -165,7 +165,7 @@ require('../static_components/header.php');
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Annual Depreciation :</span>
-                                <input type="text" disabled class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="[txt][depreciation]" id="txtdepreciation" name="data[annualdep]">
+                                <input type="text" disabled class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"  id="txtdepreciation" name="data[annualdep]">
                             </div>
                         </div>
                     </div>
@@ -191,7 +191,7 @@ require('../static_components/header.php');
                         <div class="col">
                             <div class="mb-3">
                                 <label for="formFileMultiple" class="form-label">Upload Asset Images :</label>
-                                <input class="form-control" type="file" id="formFileMultiple" multiple style="font-size: 10px;" onchange="previewImages()">
+                                <input class="form-control" type="file" id="formFileMultiple" multiple style="font-size: 10px;"  name="data[files]" onchange="previewImages()">
                             </div>
                         </div>
                     </div>
@@ -207,7 +207,7 @@ require('../static_components/header.php');
                         <div class="col">
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end table-actions">
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#impRepair" type="button" style="color: white!important;"><i class="fa-solid fa-compass-drafting" style="color: #f3f3f3!important;"></i> &nbsp;Improvement & Repairs</button>
-                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AssignEmp" type="button" style="color: white!important;"><i class="fa-solid fa-users" style="color: #f3f3f3!important;"></i> &nbsp;Assigned Employee History</button>
+                                <button class="btn btn-primary" id="assginBtn" data-bs-toggle="modal" data-bs-target="#AssignEmp" type="button" style="color: white!important;"><i class="fa-solid fa-users" style="color: #f3f3f3!important;"></i> &nbsp;Assigned Employee History</button>
                             </div>
                         </div>
                     </div>
@@ -215,7 +215,7 @@ require('../static_components/header.php');
                     <div class="row" style="margin-top: 10px;">
                         <div class="col">
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end table-actions">
-                                <button class="btn btn-success" type="button" onclick="submitForm('form-asset')"><i class="fa-solid fa-check" style="color: white!important;"></i> &nbsp; Save Asset</button>
+                                <button class="btn btn-success" type="button" onclick="save()"><i class="fa-solid fa-check" style="color: white!important;"></i> &nbsp; Save Asset</button>
                                 <a href="assets.php" class="btn btn-danger" type="button"><i class="fa-solid fa-ban" style="color: white!important;"></i> &nbsp; Cancel Asset</a>
                             </div>
                         </div>
@@ -229,7 +229,7 @@ require('../static_components/header.php');
 </form>
 
 <!-- Improvement Cost & Repair  -->
-<div class="modal fade" id="impRepair" tabindex="-1" aria-labelledby="impRepairLabel" aria-hidden="true">
+<div class="modal fade" id="impRepair" tabindex="-1" aria-labelledby="impRepairLabel" aria-hidden="true" >
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -288,7 +288,7 @@ require('../static_components/header.php');
 
 
 <!-- Assign Employee -->
-<div class="modal fade" id="AssignEmp" tabindex="-1" aria-labelledby="impRepairLabel" aria-hidden="true">
+<div class="modal fade" id="AssignEmp" tabindex="-1" aria-labelledby="impRepairLabel" aria-hidden="true" >
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -300,7 +300,10 @@ require('../static_components/header.php');
                     <div class="col-8">
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing-sm">Employee :</span>
-                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                            <!-- <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"> -->
+                            <select id="assignemp" style="width:100%">
+
+                            </select>
                         </div>
                     </div>
                     <div class="col">
@@ -333,6 +336,7 @@ require('../static_components/footer.php');
         $('.assign-emp').DataTable({
             searching: false
         })
+        $('#assignemp').select2()
         $('#location').select2()
         $('#dept').select2()
         $('#status').select2()
@@ -454,4 +458,94 @@ require('../static_components/footer.php');
             container.append(newImg)
         })
     }
+
+    function getData(table, target){
+        $(`#${target}`).empty()
+        $.ajax({
+            url : "../clsController/asset.php",
+            type : "POST",
+            contentType : "application/x-www-form-urlencoded",
+            data : `table=${table}&action=getdata`,
+            error : (error) => {
+
+            },
+            success : (res) => {
+                let data = JSON.parse(res)
+                if(data.lenght != 0){
+                    data.forEach(item => {
+                        $(`#${target}`).append(`<option value="${item[1]}">${item[2]}</option>`)
+                    });        
+                }
+            }
+        })
+    }
+
+
+    function save(){
+        if(checkforminput()){
+            $.ajax({
+                url : "../clsController/asset.php",
+                type : "POST",
+                contentType : 'application/x-www-form-urlencoded',
+                data : $('#form-asset').serialize() +`&data[annualdep]=${$('#txtdepreciation').val()}`+ '&action=new',
+                error : (error) => {
+                    console.log(error)
+                },
+                success : (data) => {
+                    if(data){
+                        alertify.success("Asset Saved")
+                        alertify.confirm('Asset Notification', 'Would you like to assign this asset to an employee ?',
+                                function(){
+                                    $('#assginBtn').click()
+                                   
+                                },
+                                function(){
+                                    alertify.error('Cancel')
+                                }
+                        );
+                        clearInputs()
+                    }
+                    
+                }
+            })
+        }
+       
+    }
+
+    function checkforminput(){
+        let formInputs = $('#form-asset input')
+        let passed = true;
+        formInputs.map((index,element) => {
+            if(element.type == "text"){
+                if(element.id != "txtByPercent"){
+                    if(element.value == ''){
+                        element.style.border = ".5px solid red"
+                        passed = false;
+                    }else{
+                        element.style.border = ".5px solid #ced4da"
+                    }
+                }
+            }
+        })
+        return passed
+    }
+
+    function clearInputs(){
+        let formInputs = $('#form-asset input')
+        let passed = true;
+        formInputs.map((index,element) => {
+            if(element.type == "text"){
+                element.value = ""
+            }
+        })
+    }
+
+    function getEmployee(){
+        
+    }
+    getData("department","dept")
+    getData("status","status")
+    getData("category","cat")
+    getData("location","location")
+    // getData("employee","assignemp")
 </script>
