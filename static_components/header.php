@@ -14,7 +14,7 @@
     <!-- <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.rtl.min.css" /> -->
     <link rel="stylesheet" href="../style.css?<?php echo time() ?>">
     <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <title>Document</title>
+    <title>ASSET MONITORING SYSTEM</title>
 </head>
 
 <body>

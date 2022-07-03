@@ -34,4 +34,10 @@ switch ($_POST['action']) {
             echo json_encode($clsController->viewlist());
         }
         break;
+    case 'getEmployee':
+        $xdata['loc_code'] = $_POST['location'];
+        $xdata['dept_code'] = $_POST['department'];
+        $clsController = new clsController('', 'employee');
+        echo json_encode($clsController->get2('employee', $xdata ));
+        break;
 }

@@ -98,6 +98,32 @@ class clsController
             die();
         }
     }
+
+    function get2($table, $columns){
+        $condition = '';
+        $data = [];
+        foreach ($columns as $key => $value) {
+            if($condition != ''){
+                $condition .= " AND ";
+            }
+            array_push($data, $value);
+            $condition .= "$key = ?";   
+        }
+        try {
+            $clsConnection = new dbConnection();
+            $conn = $clsConnection->conn();
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $query = "SELECT * from `$table` where $condition";
+            $stmt = $conn->prepare($query);
+            $stmt->execute( $data);
+            $dbData = $stmt->fetchAll();
+            return $dbData;
+        } catch (\Throwable $th) {
+            var_dump($th);
+            return false;
+            die();
+        }
+    }
     function update($id, $identifier)
     {
         try {
@@ -193,6 +219,22 @@ class clsController
             $query = "SELECT * from $this->table $condition $where_condition";
             $stmt = $conn->prepare($query);
             $stmt->execute($find);
+            $data = $stmt->fetchAll();
+            return $data;
+        } catch (\Throwable $th) {
+            var_dump($th);
+            return false;
+        }
+    }
+
+    function list_custom($controllerquery, $data){
+        try {
+            $clsConnection = new dbConnection();
+            $conn = $clsConnection->conn();
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $query = "$controllerquery";
+            $stmt = $conn->prepare($query);
+            $stmt->execute($data);
             $data = $stmt->fetchAll();
             return $data;
         } catch (\Throwable $th) {

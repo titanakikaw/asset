@@ -1,7 +1,7 @@
 <?php
 require('../static_components/header.php');
 ?>
-<form id="form-asset">
+<form id="form-asset" enctype="multipart/form-data">
     <div class="container-fluid" style="background-color: #f3f3f3;">
         <div class="container" style="padding: 10px;">
             <div class="row">
@@ -62,7 +62,7 @@ require('../static_components/header.php');
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Asset Code :</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[assetno]">
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[assetno]" id="assetno">
                             </div>
                         </div>
 
@@ -164,8 +164,16 @@ require('../static_components/header.php');
                     <div class="row">
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Monthly Depreciation :</span>
+                                <input type="text" disabled class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"  id="txtdepreciation" name="data[monthlydep]">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Annual Depreciation :</span>
-                                <input type="text" disabled class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"  id="txtdepreciation" name="data[annualdep]">
+                                <input type="text" disabled class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"  id="txtannualdepreciation" name="data[annualdep]">
                             </div>
                         </div>
                     </div>
@@ -207,7 +215,7 @@ require('../static_components/header.php');
                         <div class="col">
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end table-actions">
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#impRepair" type="button" style="color: white!important;"><i class="fa-solid fa-compass-drafting" style="color: #f3f3f3!important;"></i> &nbsp;Improvement & Repairs</button>
-                                <button class="btn btn-primary" id="assginBtn" data-bs-toggle="modal" data-bs-target="#AssignEmp" type="button" style="color: white!important;"><i class="fa-solid fa-users" style="color: #f3f3f3!important;"></i> &nbsp;Assigned Employee History</button>
+                                <button class="btn btn-primary" id="assginBtn" data-bs-toggle="modal" data-bs-target="#AssignEmp" type="button" style="color: white!important;" onclick="  getEmployee()"><i class="fa-solid fa-users" style="color: #f3f3f3!important;"></i> &nbsp;Assigned Employee History</button>
                             </div>
                         </div>
                     </div>
@@ -289,7 +297,7 @@ require('../static_components/header.php');
 
 <!-- Assign Employee -->
 <div class="modal fade" id="AssignEmp" tabindex="-1" aria-labelledby="impRepairLabel" aria-hidden="true" >
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Asset Employee Assignment</h5>
@@ -297,28 +305,39 @@ require('../static_components/header.php');
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-8">
+                    <div class="col-9">
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing-sm">Employee :</span>
                             <!-- <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"> -->
-                            <select id="assignemp" style="width:100%">
+                            <select id="selectassignemp" style="width:100%">
 
                             </select>
                         </div>
                     </div>
                     <div class="col">
-                        <button type="button" class="btn btn-primary">Assign Employee</button>
+                        <button type="button" class="btn btn-primary" id="assignBtn" onclick="assignEmployee()">Assign Employee</button>
                     </div>
                 </div>
                 <div class="row">
                     <table class="table assign-emp">
                         <thead>
                             <tr>
-                                <th>Employee No.</th>
+                                <!-- <th>Employee No.</th> -->
                                 <th>Fullname</th>
                                 <th>Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
+                        <tbody>
+                            <tr>
+                                <!-- <td>1</td> -->
+                                <td>1</td>
+                                <td></td>
+                                <td>Unassigned</td>
+                                <td><input type="button" class="btn btn-primary" style="font-size: 11px;border-radius:3px;" value="Unassign"></td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -332,11 +351,47 @@ require('../static_components/header.php');
 require('../static_components/footer.php');
 ?>
 <script>
+    let assigntable =  $('.assign-emp').DataTable({
+                            searching: false,
+                            "ajax" : {
+                                "url": "../clsController/asset.php",
+                                "type" : "POST",
+                                "contentType" : "application/x-www-form-urlencoded",
+                                "data" : {
+                                    "action": "getAssignedEmployee"
+                                },
+                                "success" : (data) => {
+                                    let assignStatus = false;
+                                    data.forEach((data) => {
+                                        let inputBtn = '';
+                                        if(data['status'] == "Assigned"){
+                                            assignStatus = true
+                                            inputBtn = `<input type="button" class="btn btn-primary" style="font-size: 11px;border-radius:3px;" value="Unassign">`
+                                        }else if(data['status'] == "Unassigned"){
+                                            inputBtn = `<input type="button" class="btn btn-primary" style="font-size: 11px;border-radius:3px;" value="Re-Assign">`
+                                        }
+                                        assigntable.row.add([
+                                            `${data['lname']}, ${data['fname']} ${data['mi']}`,
+                                            `${data['date']}`,
+                                            `${data['status']}`,
+                                            `${inputBtn}`,
+                                        ]).draw(false)
+                                    })
+
+                                    if(assignStatus){
+                                        $('#assignBtn').attr("disabled", true)
+                                    }
+                                },
+                                "error" : (data) => {
+                                    $('.assign-emp tbody').empty()
+                                    $('.assign-emp tbody').append("<tr><td colspan='4' style='text-align:center'>No Data Available</td></tr>")
+                                }
+                            }
+                        })
+
+
     $(document).ready(() => {
-        $('.assign-emp').DataTable({
-            searching: false
-        })
-        $('#assignemp').select2()
+        $('#selectassignemp').select2()
         $('#location').select2()
         $('#dept').select2()
         $('#status').select2()
@@ -347,8 +402,6 @@ require('../static_components/footer.php');
         $('#assetdteTo').datepicker({
             format: "mm-dd-yyyy"
         })
-
-
     })
 
     function moneyFormat(field, type) {
@@ -403,8 +456,6 @@ require('../static_components/footer.php');
         })
     }
 
-    function submitForm(id) {}
-
     function calcPerAmount() {
         let percentage = $('#txtByPercent').val()
         let newVal = percentage.replace("%", '')
@@ -419,6 +470,7 @@ require('../static_components/footer.php');
         let SalvageValue = $('#txtByAmount').val()
         let UsefulLife = $('#txtusefullife').val();
         let Depreciation = $('#txtdepreciation');
+        let AnnualDepreciation = $('#txtannualdepreciation');
         let assetAmount = $('#txtAssetAmount').val()
 
         assetAmount = parseFloat(assetAmount.replace(" PHP ", ''));
@@ -436,10 +488,17 @@ require('../static_components/footer.php');
 
 
         const deprecialbleCost = assetAmount - SalvageValue;
-        const annualDepreciation = deprecialbleCost / UsefulLife;
+        const monthlyDepreciation = deprecialbleCost / UsefulLife;
 
-        Depreciation.val(annualDepreciation)
+        Depreciation.val(monthlyDepreciation)
+        if(UsefulLife >= 12 ){
+            AnnualDepreciation.val(monthlyDepreciation * 12);
+        }else{
+            AnnualDepreciation.val(0);
+        }
+       
         moneyFormat($('#txtdepreciation')[0], 'currency')
+        moneyFormat($('#txtannualdepreciation')[0], 'currency')
     }
 
     function previewImages() {
@@ -480,36 +539,67 @@ require('../static_components/footer.php');
         })
     }
 
-
-    function save(){
+    function save(){ 
         if(checkforminput()){
             $.ajax({
                 url : "../clsController/asset.php",
                 type : "POST",
                 contentType : 'application/x-www-form-urlencoded',
-                data : $('#form-asset').serialize() +`&data[annualdep]=${$('#txtdepreciation').val()}`+ '&action=new',
+                data : $('#form-asset').serialize() +`&data[annualdep]=${$('#txtannualdepreciation').val()}`+`&data[monthlydep]=${$('#txtdepreciation').val()}&`+ getFiles()+'&action=new',
                 error : (error) => {
                     console.log(error)
                 },
                 success : (data) => {
                     if(data){
+                        getEmployee();
+                        saveImages();
                         alertify.success("Asset Saved")
                         alertify.confirm('Asset Notification', 'Would you like to assign this asset to an employee ?',
                                 function(){
+                                   
                                     $('#assginBtn').click()
                                    
                                 },
                                 function(){
                                     alertify.error('Cancel')
+                                    window.location.replace("assets.php");
                                 }
                         );
-                        clearInputs()
+                        // clearInputs()
+                    }else{
+                        alertify.warning("Error in saving, Please check all valid fields.")
                     }
                     
                 }
             })
         }
        
+    }
+
+    function saveImages(){
+        let images = $('#formFileMultiple').prop("files");
+        let formdata = new FormData();
+        for (let index = 0; index < images.length; index++) {
+            formdata.append("file[]", images[index])           
+        }
+        formdata.append('action', "saveImages")
+        $.ajax({
+            url : "../clsController/asset.php",
+            type : "POST",
+            processData: false,
+            contentType: false,
+            cache: false,
+            data : formdata,  
+            enctype: 'multipart/form-data',
+            error : (error) => {
+                console.log(error)
+            },
+            success : (data) => {
+                if(data){
+                    alertify.success("Images successfully saved")
+                }
+            }
+        })
     }
 
     function checkforminput(){
@@ -541,7 +631,57 @@ require('../static_components/footer.php');
     }
 
     function getEmployee(){
-        
+        $('#selectassignemp').empty();
+        $.ajax({
+            url : "../clsController/employee.php",
+            type : "POST",
+            contentType : "application/x-www-form-urlencoded",
+            data : `department=${$('#dept').val()}&location=${$('#location').val()}&action=getEmployee`,
+            error : (error) => {
+                console.log(error)
+            },
+            success : (data) => {
+                data = JSON.parse(data)
+                data.forEach(item => {
+                    $('#selectassignemp').append(`<option value="${item['empno']}">${item['lname']}, ${item['fname']} ${item['mi']}</option>`)
+                });
+            }
+        })
+    }
+
+    function getFiles(){
+        let formfiles = $('#formFileMultiple')[0].files;
+        let queryFile = '';
+
+        for (let index = 0; index < formfiles.length; index++) {
+            if(queryFile != ''){
+                queryFile +='&'
+            }
+            queryFile += `file[${index}]=${formfiles[index].name}`
+            
+        }
+        return(queryFile)
+    }
+
+    function assignEmployee(){
+        if($('#assetno').val() != ''){
+            $.ajax({
+                url : "../clsController/asset.php",
+                type : 'POST',
+                data : `data[empno]=${$('#selectassignemp').val()}&data[assetno]=${$('#assetno').val()}&action=assignemployee`,
+                error : (error) => {
+                    console.log(error)
+                },
+                success : (data) => {
+                    if(data){
+                        alertify.success("Successfully assigned employee!")
+                        $('.assign-emp').DataTable().ajax.reload();
+                    }
+                }
+            })
+        }else{
+            alertify.error("Asset Code is Empty")
+        }
     }
     getData("department","dept")
     getData("status","status")
