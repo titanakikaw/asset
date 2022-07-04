@@ -6,7 +6,7 @@ require('../static_components/header.php');
         <div class="col">
             <div class="d-grid gap-2 d-md-flex justify-content-md-start table-actions">
                 <a href="newasset.php" class="btn" type="button" style="border-radius: 2px; background-color:#f3f3f3"><i class="fa-solid fa-plus"></i> New Asset</a>
-                <button class="btn" type="button" style="border-radius: 2px; background-color:#f3f3f3"><i class="fa-solid fa-pencil"></i> Edit Asset</button>
+                <button class="btn" type="button" style="border-radius: 2px; background-color:#f3f3f3" onclick="Edit()"><i class="fa-solid fa-pencil"></i> Edit Asset</button>
                 <button class="btn" type="button" style="border-radius: 2px; background-color:#f3f3f3"><i class="fa-solid fa-trash"></i> Delete Asset</button>
             </div>
         </div>
@@ -31,27 +31,16 @@ require('../static_components/header.php');
                     <th>Asset Code</th>
                     <th>Description</th>
                     <th>Category</th>
-                    <th>Type</th>
                     <th>Location</th>
                     <th>Department</th>
                     <th>Start Date</th>
                     <th>End Date</th>
+                    <th>Status</th>
                     <th>Assigned Employee</th>
                 </tr>
             </thead>
             <div class="tbody">
-                <tr>
-                    <td><input type="checkbox"></td>
-                    <td>test</td>
-                    <td>test</td>
-                    <td>tesasdsadt</td>
-                    <td>tesasdsadt</td>
-                    <td>test</td>
-                    <td>test</td>
-                    <td>test</td>
-                    <td>test</td>
-                    <td>test</td>
-                </tr>
+
             </div>
         </table>
     </div>
@@ -151,7 +140,7 @@ require('../static_components/header.php');
                 <div class="col">
                     <div class="input-group input-group-sm mb-3">
                         <span class="input-group-text" id="inputGroup-sizing-sm">Assigned Employee :</span>
-                        <select  class="form-select" id="assgnEmp">
+                        <select class="form-select" id="assgnEmp">
                             <option></option>
                         </select>
                     </div>
@@ -173,14 +162,42 @@ require('../static_components/footer.php');
 ?>
 
 <script>
+    let assetTable = $('.asset-table').DataTable({
+        searching: false,
+        ordering: false,
+        "ajax": {
+            "url": "../clsController/asset.php",
+            "type": "POST",
+            "contentType": "application/x-www-form-urlencoded",
+            "data": {
+                "action": "getCustomTable",
+            },
+            "success": (data) => {
+                if (data.length > 0) {
+                    data.forEach(data => {
+                        assetTable.row.add([
+                            `<input type="checkbox" id="tbldata" value="${data['assetno']}">`,
+                            `${data['assetno']}`,
+                            `${data['description']}`,
+                            `${data['cat_code']}`,
+                            `${data['loc_code']}`,
+                            `${data['dept_code']}`,
+                            `${data['dtefrom']}`,
+                            `${data['dteto']}`,
+                            `${data['status']}`,
+                            `${data['name'] ? data['name'] : 'None'}`,
+
+                        ]).draw(false)
+                    });
+
+                }
+            },
+            "error": (error) => {
+                console.log(error)
+            }
+        }
+    })
     $(document).ready(() => {
-        $('.asset-table').DataTable({
-            searching: false,
-            ordering: false,
-            select: true
-        })
-
-
         $('.filter-asset select').map((index, element) => {
             $(`#${element.id}`).select2({
                 dropdownCssClass: "myFont",
@@ -189,11 +206,33 @@ require('../static_components/footer.php');
         })
 
         $('#assetdteFrom').datepicker({
-            format : "mm-dd-yyyy"
+            format: "mm-dd-yyyy"
         })
         $('#assetdteTo').datepicker({
-            format : "mm-dd-yyyy"
+            format: "mm-dd-yyyy"
         })
 
     })
+
+    function Edit() {
+        if (getCheckedValues("tbldata").length == 1) {
+            window.location.href = `newasset.php?asset=${btoa(getCheckedValues("tbldata")[0])}`
+        } else if (getCheckedValues("tbldata").length == 0) {
+            alertify.error("Please select a asset")
+        } else if (getCheckedValues("tbldata").length > 1) {
+            alertify.error("One asset only should be selected")
+        }
+    }
+
+
+    function getCheckedValues(elemIdentyId) {
+        let values = [];
+        let checkboxes = document.querySelectorAll(`#${elemIdentyId}`);
+        checkboxes.forEach(element => {
+            if (element.checked) {
+                values.push(element.value)
+            }
+        });
+        return values
+    }
 </script>

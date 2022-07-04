@@ -1,5 +1,23 @@
 <?php
 require('../static_components/header.php');
+require('../model/clsConnection.php');
+
+if (base64_decode($_GET['asset']) != '') {
+    try {
+        $dbConn = new dbConnection();
+        $conn = $dbConn->conn();
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $query = "SELECT * from assets where assetno=?";
+        $stmt = $conn->prepare($query);
+        $stmt->execute([base64_decode($_GET['asset'])]);
+        $GlobalData = $stmt->fetch();
+    } catch (\Throwable $th) {
+        var_dump($th);
+    }
+
+    // die();
+}
+
 ?>
 <form id="form-asset" enctype="multipart/form-data">
     <div class="container-fluid" style="background-color: #f3f3f3;">
@@ -12,21 +30,55 @@ require('../static_components/header.php');
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Location :</span>
                                 <select class="form-select" id="location" name="data[loc_code]" style="width:100%">
-                                    <option selected>Open this select menu</option>
-                                    <option value="1">Operational</option>
-                                    <option value="2">Non - Operational</option>
-                                    <option value="3">Three</option>
+                                    <?php
+                                    try {
+                                        $dbConn = new dbConnection();
+                                        $conn = $dbConn->conn();
+                                        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                                        $query = "SELECT * from location";
+                                        $stmt = $conn->prepare($query);
+                                        $stmt->execute();
+                                        $db_data = $stmt->fetchAll();
+                                        foreach ($db_data as $key => $value) {
+                                            if ($value['loc_code'] == $GlobalData['loc_code']) {
+                                                $selected = "selected";
+                                            } else {
+                                                $selected = "";
+                                            }
+                                            echo "<option value='" . $value['loc_code'] . "'  $selected >" . $value['description'] . "</option>";
+                                        }
+                                    } catch (\Throwable $th) {
+                                        var_dump($th);
+                                    }
+                                    ?>
                                 </select>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm" >Department :</span>
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Department :</span>
                                 <select class="form-select" id="dept" name="data[dept_code]" style="width:100%">
-                                    <option selected>Open this select menu</option>
-                                    <option value="1">Operational</option>
-                                    <option value="2">Non - Operational</option>
-                                    <option value="3">Three</option>
+                                    <?php
+                                    try {
+                                        $dbConn = new dbConnection();
+                                        $conn = $dbConn->conn();
+                                        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                                        $query = "SELECT * from department";
+                                        $stmt = $conn->prepare($query);
+                                        $stmt->execute();
+                                        $db_data = $stmt->fetchAll();
+                                        foreach ($db_data as $key => $value) {
+                                            if ($value['dept_code'] == $GlobalData['dept_code']) {
+                                                $selected = "selected";
+                                            } else {
+                                                $selected = "";
+                                            }
+                                            echo "<option value='" . $value['dept_code'] . "'  $selected >" . $value['description'] . "</option>";
+                                        }
+                                    } catch (\Throwable $th) {
+                                        var_dump($th);
+                                    }
+                                    ?>
                                 </select>
                             </div>
                         </div>
@@ -36,21 +88,55 @@ require('../static_components/header.php');
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Status :</span>
                                 <select class="form-select" id="status" name="data[status_code]" style="width:100%">
-                                    <option selected>Open this select menu</option>
-                                    <option value="1">Operational</option>
-                                    <option value="2">Non - Operational</option>
-                                    <option value="3">Three</option>
+                                    <?php
+                                    try {
+                                        $dbConn = new dbConnection();
+                                        $conn = $dbConn->conn();
+                                        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                                        $query = "SELECT * from status";
+                                        $stmt = $conn->prepare($query);
+                                        $stmt->execute();
+                                        $db_data = $stmt->fetchAll();
+                                        foreach ($db_data as $key => $value) {
+                                            if ($value['status_code'] == $GlobalData['status_code']) {
+                                                $selected = "selected";
+                                            } else {
+                                                $selected = "";
+                                            }
+                                            echo "<option value='" . $value['status_code'] . "'  $selected >" . $value['description'] . "</option>";
+                                        }
+                                    } catch (\Throwable $th) {
+                                        var_dump($th);
+                                    }
+                                    ?>
                                 </select>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Category :</span>
-                                <select class="form-select" id="cat" style="width:100%"  name="data[cat_code]">
-                                    <option selected>Open this select menu</option>
-                                    <option value="1">Operational</option>
-                                    <option value="2">Non - Operational</option>
-                                    <option value="3">Three</option>
+                                <select class="form-select" id="cat" style="width:100%" name="data[cat_code]">
+                                    <?php
+                                    try {
+                                        $dbConn = new dbConnection();
+                                        $conn = $dbConn->conn();
+                                        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                                        $query = "SELECT * from category";
+                                        $stmt = $conn->prepare($query);
+                                        $stmt->execute();
+                                        $db_data = $stmt->fetchAll();
+                                        foreach ($db_data as $key => $value) {
+                                            if ($value['cat_code'] == $GlobalData['cat_code']) {
+                                                $selected = "selected";
+                                            } else {
+                                                $selected = "";
+                                            }
+                                            echo "<option value='" . $value['cat_code'] . "'  $selected >" . $value['description'] . "</option>";
+                                        }
+                                    } catch (\Throwable $th) {
+                                        var_dump($th);
+                                    }
+                                    ?>
                                 </select>
                             </div>
                         </div>
@@ -62,7 +148,7 @@ require('../static_components/header.php');
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Asset Code :</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[assetno]" id="assetno">
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[assetno]" id="assetno" value="<?php echo $GlobalData['assetno'] ? $GlobalData['assetno'] : '' ?>">
                             </div>
                         </div>
 
@@ -71,7 +157,7 @@ require('../static_components/header.php');
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Asset Description :</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[description]">
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[description]" value="<?php echo $GlobalData['assetno'] ? $GlobalData['description'] : '' ?>">
                             </div>
                         </div>
                     </div>
@@ -79,13 +165,13 @@ require('../static_components/header.php');
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Model No :</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[modelno]">
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[modelno]" value="<?php echo $GlobalData['modelno'] ? $GlobalData['modelno'] : '' ?>">
                             </div>
                         </div>
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Serial No :</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[serialno]">
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[serialno]" value="<?php echo $GlobalData['serialno'] ? $GlobalData['serialno'] : '' ?>">
                             </div>
                         </div>
                     </div>
@@ -93,13 +179,13 @@ require('../static_components/header.php');
                         <div class="col-6">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Purchase Date Warranty :</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" id="assetdteFrom" aria-describedby="inputGroup-sizing-sm" name="data[dtefrom]">
+                                <input type="text" class="form-control" aria-label="Sizing example input" id="assetdteFrom" aria-describedby="inputGroup-sizing-sm" name="data[dtefrom]" value="<?php echo $GlobalData['dtefrom'] ? $GlobalData['dtefrom'] : '' ?>">
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">End Warranty Date :</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="assetdteTo" name="data[dteto]">
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="assetdteTo" name="data[dteto]" value="<?php echo $GlobalData['dteto'] ? $GlobalData['dteto'] : '' ?>">
                             </div>
                         </div>
                     </div>
@@ -108,13 +194,13 @@ require('../static_components/header.php');
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Amount :</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[cost]" id="txtAssetAmount" onkeyup="moneyFormat(this, 'currency')" required>
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[cost]" id="txtAssetAmount" onkeyup="moneyFormat(this, 'currency')" onchange="calcDep()" required value="<?php echo $GlobalData['cost'] ?  "PHP " . $GlobalData['cost'] : '' ?>">
                             </div>
                         </div>
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Quantity :</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[qty]">
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[qty]" value="<?php echo $GlobalData['qty'] ? $GlobalData['qty'] : '' ?>">
                             </div>
                         </div>
                     </div>
@@ -122,7 +208,7 @@ require('../static_components/header.php');
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Useful Lifecycle (months):</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[usefullife]" id="txtusefullife">
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[usefullife]" id="txtusefullife" onkeyup="calcDep()" value="<?php echo $GlobalData['usefullife'] ? $GlobalData['usefullife'] : '' ?>">
                             </div>
                         </div>
                     </div>
@@ -151,13 +237,13 @@ require('../static_components/header.php');
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">By Amount:</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="txtByAmount" onkeyup="moneyFormat(this, 'currency'),calcDep()" onchange="handleChangeMoney(this)" name="data[salvalue]" disabled required>
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="txtByAmount" onkeyup="moneyFormat(this, 'currency'),calcDep()" onchange="handleChangeMoney(this)" name="data[salvalue]" disabled required value="<?php echo $GlobalData['salvalue'] ?  "PHP " . $GlobalData['salvalue'] : '' ?>">
                             </div>
                         </div>
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">By Percentage:</span>
-                                <input type="text" class="form-control" onkeyup="moneyFormat(this, 'percentage'),calcPerAmount(),calcDep()" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="txtByPercent" disabled name="data[salpercent]">
+                                <input type="text" class="form-control" onkeyup="moneyFormat(this, 'percentage'),calcPerAmount(),calcDep()" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="txtByPercent" disabled name="data[salpercent]" value="<?php echo $GlobalData['salvalue'] ?  "PHP " . $GlobalData['salpercent'] : '' ?>">
                             </div>
                         </div>
                     </div>
@@ -165,7 +251,7 @@ require('../static_components/header.php');
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Monthly Depreciation :</span>
-                                <input type="text" disabled class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"  id="txtdepreciation" name="data[monthlydep]">
+                                <input type="text" disabled class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="txtdepreciation" name="data[monthlydep]" value="<?php echo $GlobalData['monthlydep'] ? "PHP " . $GlobalData['monthlydep'] : '' ?>">
                             </div>
                         </div>
                     </div>
@@ -173,7 +259,7 @@ require('../static_components/header.php');
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Annual Depreciation :</span>
-                                <input type="text" disabled class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"  id="txtannualdepreciation" name="data[annualdep]">
+                                <input type="text" disabled class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="txtannualdepreciation" name="data[annualdep]" value="<?php echo $GlobalData['annualdep'] ? $GlobalData['annualdep'] : '0' ?>">
                             </div>
                         </div>
                     </div>
@@ -199,14 +285,29 @@ require('../static_components/header.php');
                         <div class="col">
                             <div class="mb-3">
                                 <label for="formFileMultiple" class="form-label">Upload Asset Images :</label>
-                                <input class="form-control" type="file" id="formFileMultiple" multiple style="font-size: 10px;"  name="data[files]" onchange="previewImages()">
+                                <input class="form-control" type="file" id="formFileMultiple" multiple style="font-size: 10px;" name="data[files]" onchange="previewImages()">
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
                             <div class="d-flex justify-content-evenly img-container" style="background-color: white; padding: 5px">
-
+                                <?php
+                                try {
+                                    $dbConn = new dbConnection();
+                                    $conn = $dbConn->conn();
+                                    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                                    $query = "SELECT * from asset_files where assetno =?";
+                                    $stmt = $conn->prepare($query);
+                                    $stmt->execute([$GlobalData['assetno']]);
+                                    $db_data = $stmt->fetchAll();
+                                    foreach ($db_data as $key => $value) {
+                                        echo "<img src=" . $value['filename'] . " alt='img' style='height:100px'>";
+                                    }
+                                } catch (\Throwable $th) {
+                                    var_dump($th);
+                                }
+                                ?>
 
                             </div>
                         </div>
@@ -237,7 +338,7 @@ require('../static_components/header.php');
 </form>
 
 <!-- Improvement Cost & Repair  -->
-<div class="modal fade" id="impRepair" tabindex="-1" aria-labelledby="impRepairLabel" aria-hidden="true" >
+<div class="modal fade" id="impRepair" tabindex="-1" aria-labelledby="impRepairLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -296,7 +397,7 @@ require('../static_components/header.php');
 
 
 <!-- Assign Employee -->
-<div class="modal fade" id="AssignEmp" tabindex="-1" aria-labelledby="impRepairLabel" aria-hidden="true" >
+<div class="modal fade" id="AssignEmp" tabindex="-1" aria-labelledby="impRepairLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -351,43 +452,44 @@ require('../static_components/header.php');
 require('../static_components/footer.php');
 ?>
 <script>
-    let assigntable =  $('.assign-emp').DataTable({
-                            searching: false,
-                            "ajax" : {
-                                "url": "../clsController/asset.php",
-                                "type" : "POST",
-                                "contentType" : "application/x-www-form-urlencoded",
-                                "data" : {
-                                    "action": "getAssignedEmployee"
-                                },
-                                "success" : (data) => {
-                                    let assignStatus = false;
-                                    data.forEach((data) => {
-                                        let inputBtn = '';
-                                        if(data['status'] == "Assigned"){
-                                            assignStatus = true
-                                            inputBtn = `<input type="button" class="btn btn-primary" style="font-size: 11px;border-radius:3px;" value="Unassign">`
-                                        }else if(data['status'] == "Unassigned"){
-                                            inputBtn = `<input type="button" class="btn btn-primary" style="font-size: 11px;border-radius:3px;" value="Re-Assign">`
-                                        }
-                                        assigntable.row.add([
-                                            `${data['lname']}, ${data['fname']} ${data['mi']}`,
-                                            `${data['date']}`,
-                                            `${data['status']}`,
-                                            `${inputBtn}`,
-                                        ]).draw(false)
-                                    })
+    let assigntable = $('.assign-emp').DataTable({
+        searching: false,
+        "ajax": {
+            "url": "../clsController/asset.php",
+            "type": "POST",
+            "contentType": "application/x-www-form-urlencoded",
+            "data": {
+                "action": "getAssignedEmployee",
+                "assetno": `${$('#assetno').val()}`
+            },
+            "success": (data) => {
+                let assignStatus = false;
+                data.forEach((data) => {
+                    let inputBtn = '';
+                    if (data['status'] == "Assigned") {
+                        assignStatus = true
+                        inputBtn = `<input type="button" class="btn btn-primary" style="font-size: 11px;border-radius:3px;" value="Unassign">`
+                    } else if (data['status'] == "Unassigned") {
+                        inputBtn = `<input type="button" class="btn btn-primary" style="font-size: 11px;border-radius:3px;" value="Re-Assign">`
+                    }
+                    assigntable.row.add([
+                        `${data['lname']}, ${data['fname']} ${data['mi']}`,
+                        `${data['date']}`,
+                        `${data['status']}`,
+                        `${inputBtn}`,
+                    ]).draw(false)
+                })
 
-                                    if(assignStatus){
-                                        $('#assignBtn').attr("disabled", true)
-                                    }
-                                },
-                                "error" : (data) => {
-                                    $('.assign-emp tbody').empty()
-                                    $('.assign-emp tbody').append("<tr><td colspan='4' style='text-align:center'>No Data Available</td></tr>")
-                                }
-                            }
-                        })
+                if (assignStatus) {
+                    $('#assignBtn').attr("disabled", true)
+                }
+            },
+            "error": (data) => {
+                $('.assign-emp tbody').empty()
+                $('.assign-emp tbody').append("<tr><td colspan='4' style='text-align:center'>No Data Available</td></tr>")
+            }
+        }
+    })
 
 
     $(document).ready(() => {
@@ -473,7 +575,10 @@ require('../static_components/footer.php');
         let AnnualDepreciation = $('#txtannualdepreciation');
         let assetAmount = $('#txtAssetAmount').val()
 
+        assetAmount = assetAmount.replace("PHP ", "")
+        SalvageValue = SalvageValue.replace("PHP ", "")
         assetAmount = parseFloat(assetAmount.replace(" PHP ", ''));
+        console.log(assetAmount)
         SalvageValue = parseFloat(SalvageValue.replace(" PHP ", ''));
 
         if (assetAmount == '') {
@@ -491,12 +596,12 @@ require('../static_components/footer.php');
         const monthlyDepreciation = deprecialbleCost / UsefulLife;
 
         Depreciation.val(monthlyDepreciation)
-        if(UsefulLife >= 12 ){
+        if (UsefulLife >= 12) {
             AnnualDepreciation.val(monthlyDepreciation * 12);
-        }else{
+        } else {
             AnnualDepreciation.val(0);
         }
-       
+
         moneyFormat($('#txtdepreciation')[0], 'currency')
         moneyFormat($('#txtannualdepreciation')[0], 'currency')
     }
@@ -518,100 +623,100 @@ require('../static_components/footer.php');
         })
     }
 
-    function getData(table, target){
+    function getData(table, target) {
         $(`#${target}`).empty()
         $.ajax({
-            url : "../clsController/asset.php",
-            type : "POST",
-            contentType : "application/x-www-form-urlencoded",
-            data : `table=${table}&action=getdata`,
-            error : (error) => {
+            url: "../clsController/asset.php",
+            type: "POST",
+            contentType: "application/x-www-form-urlencoded",
+            data: `table=${table}&action=getdata`,
+            error: (error) => {
 
             },
-            success : (res) => {
+            success: (res) => {
                 let data = JSON.parse(res)
-                if(data.lenght != 0){
+                if (data.lenght != 0) {
                     data.forEach(item => {
                         $(`#${target}`).append(`<option value="${item[1]}">${item[2]}</option>`)
-                    });        
+                    });
                 }
             }
         })
     }
 
-    function save(){ 
-        if(checkforminput()){
+    function save() {
+        if (checkforminput()) {
             $.ajax({
-                url : "../clsController/asset.php",
-                type : "POST",
-                contentType : 'application/x-www-form-urlencoded',
-                data : $('#form-asset').serialize() +`&data[annualdep]=${$('#txtannualdepreciation').val()}`+`&data[monthlydep]=${$('#txtdepreciation').val()}&`+ getFiles()+'&action=new',
-                error : (error) => {
+                url: "../clsController/asset.php",
+                type: "POST",
+                contentType: 'application/x-www-form-urlencoded',
+                data: $('#form-asset').serialize() + `&data[annualdep]=${$('#txtannualdepreciation').val()}` + `&data[monthlydep]=${$('#txtdepreciation').val()}&` + getFiles() + '&action=new',
+                error: (error) => {
                     console.log(error)
                 },
-                success : (data) => {
-                    if(data){
+                success: (data) => {
+                    if (data) {
                         getEmployee();
                         saveImages();
                         alertify.success("Asset Saved")
                         alertify.confirm('Asset Notification', 'Would you like to assign this asset to an employee ?',
-                                function(){
-                                   
-                                    $('#assginBtn').click()
-                                   
-                                },
-                                function(){
-                                    alertify.error('Cancel')
-                                    window.location.replace("assets.php");
-                                }
+                            function() {
+
+                                $('#assginBtn').click()
+
+                            },
+                            function() {
+                                alertify.error('Cancel')
+                                window.location.replace("assets.php");
+                            }
                         );
-                        // clearInputs()
-                    }else{
+                        clearInputs()
+                    } else {
                         alertify.warning("Error in saving, Please check all valid fields.")
                     }
-                    
+
                 }
             })
         }
-       
+
     }
 
-    function saveImages(){
+    function saveImages() {
         let images = $('#formFileMultiple').prop("files");
         let formdata = new FormData();
         for (let index = 0; index < images.length; index++) {
-            formdata.append("file[]", images[index])           
+            formdata.append("file[]", images[index])
         }
         formdata.append('action', "saveImages")
         $.ajax({
-            url : "../clsController/asset.php",
-            type : "POST",
+            url: "../clsController/asset.php",
+            type: "POST",
             processData: false,
             contentType: false,
             cache: false,
-            data : formdata,  
+            data: formdata,
             enctype: 'multipart/form-data',
-            error : (error) => {
+            error: (error) => {
                 console.log(error)
             },
-            success : (data) => {
-                if(data){
+            success: (data) => {
+                if (data) {
                     alertify.success("Images successfully saved")
                 }
             }
         })
     }
 
-    function checkforminput(){
+    function checkforminput() {
         let formInputs = $('#form-asset input')
         let passed = true;
-        formInputs.map((index,element) => {
-            if(element.type == "text"){
-                if(element.id != "txtByPercent"){
-                    if(element.value == ''){
+        formInputs.map((index, element) => {
+            if (element.type == "text") {
+                if (element.id != "txtByPercent") {
+                    if (element.value == '') {
                         element.style.border = ".5px solid red"
                         passed = false;
-                    }else{
+                    } else {
                         element.style.border = ".5px solid #ced4da"
                     }
                 }
@@ -620,27 +725,27 @@ require('../static_components/footer.php');
         return passed
     }
 
-    function clearInputs(){
+    function clearInputs() {
         let formInputs = $('#form-asset input')
         let passed = true;
-        formInputs.map((index,element) => {
-            if(element.type == "text"){
+        formInputs.map((index, element) => {
+            if (element.type == "text") {
                 element.value = ""
             }
         })
     }
 
-    function getEmployee(){
+    function getEmployee() {
         $('#selectassignemp').empty();
         $.ajax({
-            url : "../clsController/employee.php",
-            type : "POST",
-            contentType : "application/x-www-form-urlencoded",
-            data : `department=${$('#dept').val()}&location=${$('#location').val()}&action=getEmployee`,
-            error : (error) => {
+            url: "../clsController/employee.php",
+            type: "POST",
+            contentType: "application/x-www-form-urlencoded",
+            data: `department=${$('#dept').val()}&location=${$('#location').val()}&action=getEmployee`,
+            error: (error) => {
                 console.log(error)
             },
-            success : (data) => {
+            success: (data) => {
                 data = JSON.parse(data)
                 data.forEach(item => {
                     $('#selectassignemp').append(`<option value="${item['empno']}">${item['lname']}, ${item['fname']} ${item['mi']}</option>`)
@@ -649,43 +754,43 @@ require('../static_components/footer.php');
         })
     }
 
-    function getFiles(){
+    function getFiles() {
         let formfiles = $('#formFileMultiple')[0].files;
         let queryFile = '';
 
         for (let index = 0; index < formfiles.length; index++) {
-            if(queryFile != ''){
-                queryFile +='&'
+            if (queryFile != '') {
+                queryFile += '&'
             }
             queryFile += `file[${index}]=${formfiles[index].name}`
-            
+
         }
-        return(queryFile)
+        return (queryFile)
     }
 
-    function assignEmployee(){
-        if($('#assetno').val() != ''){
+    function assignEmployee() {
+        if ($('#assetno').val() != '') {
             $.ajax({
-                url : "../clsController/asset.php",
-                type : 'POST',
-                data : `data[empno]=${$('#selectassignemp').val()}&data[assetno]=${$('#assetno').val()}&action=assignemployee`,
-                error : (error) => {
+                url: "../clsController/asset.php",
+                type: 'POST',
+                data: `data[empno]=${$('#selectassignemp').val()}&data[assetno]=${$('#assetno').val()}&action=assignemployee`,
+                error: (error) => {
                     console.log(error)
                 },
-                success : (data) => {
-                    if(data){
+                success: (data) => {
+                    if (data) {
                         alertify.success("Successfully assigned employee!")
                         $('.assign-emp').DataTable().ajax.reload();
                     }
                 }
             })
-        }else{
+        } else {
             alertify.error("Asset Code is Empty")
         }
     }
-    getData("department","dept")
-    getData("status","status")
-    getData("category","cat")
-    getData("location","location")
+    // getData("department", "dept")
+    // getData("status", "status")
+    // // getData("category", "cat")
+    // getData("location", "location")
     // getData("employee","assignemp")
 </script>

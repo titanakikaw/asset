@@ -2,23 +2,21 @@
 require('../model/clsStandard.php');
 require('../model/clsConnection.php');
 date_default_timezone_set("Asia/Manila");
-
-
 switch ($_POST['action']) {
     case 'new':
         $col = $_POST['data'];
         $files = $_POST['file'];
         $col['cost'] = str_replace(" ", "", str_replace("PHP", "", $col['cost']));
-        $col['salvalue'] = str_replace(" ", "",str_replace("PHP", "", $col['salvalue']));
+        $col['salvalue'] = str_replace(" ", "", str_replace("PHP", "", $col['salvalue']));
         $deprecialbleCost =  $col['cost'] -  $col['salvalue'];
         $col['monthlydep'] =  $deprecialbleCost / $col['usefullife'];
-        if($col['usefullife'] < 12){
+        if ($col['usefullife'] < 12) {
             $col['annualdep'] = 0;
-        }else{
+        } else {
             $col['annualdep'] = $col['monthlydep'] * 12;
         }
         foreach ($col as $key => $value) {
-            if($value == ''){
+            if ($value == '') {
                 echo json_encode(false);
                 break;
             }
@@ -27,7 +25,7 @@ switch ($_POST['action']) {
         foreach ($files as $key => $value) {
             $assetFile['assetno'] = $col['assetno'];
             $assetFile['directory'] = '../assetImages';
-            $assetFile['filename'] = $assetFile['directory'].'/'.$value;
+            $assetFile['filename'] = $assetFile['directory'] . '/' . $value;
             $clsController = new clsController($assetFile, 'asset_files');
             echo json_encode($clsController->add());
         }
@@ -60,11 +58,11 @@ switch ($_POST['action']) {
             echo json_encode($clsController->viewlist());
         }
         break;
-    case 'saveImages' :
+    case 'saveImages':
         $files = $_FILES['file'];
-        foreach ( $files['tmp_name'] as $key => $value) {
+        foreach ($files['tmp_name'] as $key => $value) {
             try {
-                move_uploaded_file($value, '../assetImages/'.$files['name'][$key]);
+                move_uploaded_file($value, '../assetImages/' . $files['name'][$key]);
                 echo json_encode(true);
             } catch (\Throwable $th) {
                 var_dump($th);
@@ -78,10 +76,20 @@ switch ($_POST['action']) {
         $clsController = new clsController($xdata, 'emp_asset_assigned');
         echo json_encode($clsController->add());
         break;
-
     case 'getAssignedEmployee':
         $query = "SELECT a.date,a.status,b.lname,b.fname,b.mi from emp_asset_assigned as a  INNER JOIN employee as b on a.empno = b.empno where a.assetno = ?";
         $clsController = new clsController('', '');
-        echo json_encode($clsController->list_custom($query,[12]));
+        echo json_encode($clsController->list_custom($query, [$_POST['assetno']]));
+        break;
+    case 'getCustomTable':
+        $query = "SELECT a.* , b.description as status from assets as a INNER JOIN status as b on a.status_code = b.status_code";
+        $clsController = new clsController('', '');
+        $assetData = $clsController->list_custom($query, []);
+        foreach ($assetData as $key => $value) {
+            $query = "SELECT CONCAT(b.lname,', ', b.fname,' ', b.mi) as name from emp_asset_assigned as a inner join employee as b where assetno=?";
+            $assignedData = $clsController->list_custom($query, [$value['assetno']]);
+            $assetData[$key]['name'] = $assignedData[0]['name'];
+        }
+        echo json_encode($assetData);
         break;
 }
