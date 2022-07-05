@@ -86,9 +86,13 @@ switch ($_POST['action']) {
         $clsController = new clsController('', '');
         $assetData = $clsController->list_custom($query, []);
         foreach ($assetData as $key => $value) {
+          
             $query = "SELECT CONCAT(b.lname,', ', b.fname,' ', b.mi) as name from emp_asset_assigned as a inner join employee as b where assetno=?";
             $assignedData = $clsController->list_custom($query, [$value['assetno']]);
-            $assetData[$key]['name'] = $assignedData[0]['name'];
+            if(count($assignedData) > 0){
+                $assetData[$key]['name'] = $assignedData[0]['name'];
+            }
+            
         }
         echo json_encode($assetData);
         break;

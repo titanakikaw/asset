@@ -1,21 +1,38 @@
 <?php
 require('../static_components/header.php');
 require('../model/clsConnection.php');
-
-if (base64_decode($_GET['asset']) != '') {
-    try {
-        $dbConn = new dbConnection();
-        $conn = $dbConn->conn();
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $query = "SELECT * from assets where assetno=?";
-        $stmt = $conn->prepare($query);
-        $stmt->execute([base64_decode($_GET['asset'])]);
-        $GlobalData = $stmt->fetch();
-    } catch (\Throwable $th) {
-        var_dump($th);
+$GlobalData['loc_code'] = '';
+$GlobalData['dept_code'] ='';
+$GlobalData['status_code'] = '';
+$GlobalData['assetno'] = '';
+$GlobalData['modelno'] = '';
+$GlobalData['serialno'] = '';
+$GlobalData['description'] = '';
+$GlobalData['dtefrom'] = '';
+$GlobalData['dteto'] = '';
+$GlobalData['cost'] = '';
+$GlobalData['qty'] = '';
+$GlobalData['annualdep'] = '';
+$GlobalData['monthlydep'] = '';
+$GlobalData['salvalue'] = '';
+$GlobalData['usefullife'] = '';
+if(isset($_GET['asset'])){
+    if (base64_decode($_GET['asset']) != '') {
+        // var_dump("test");
+        try {
+            $dbConn = new dbConnection();
+            $conn = $dbConn->conn();
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $query = "SELECT * from assets where assetno=?";
+            $stmt = $conn->prepare($query);
+            $stmt->execute([base64_decode($_GET['asset'])]);
+            $GlobalData = $stmt->fetch();
+        } catch (\Throwable $th) {
+            var_dump($th);
+        
+        }
     }
-
-    // die();
+    
 }
 
 ?>
@@ -293,20 +310,23 @@ if (base64_decode($_GET['asset']) != '') {
                         <div class="col">
                             <div class="d-flex justify-content-evenly img-container" style="background-color: white; padding: 5px">
                                 <?php
-                                try {
-                                    $dbConn = new dbConnection();
-                                    $conn = $dbConn->conn();
-                                    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                                    $query = "SELECT * from asset_files where assetno =?";
-                                    $stmt = $conn->prepare($query);
-                                    $stmt->execute([$GlobalData['assetno']]);
-                                    $db_data = $stmt->fetchAll();
-                                    foreach ($db_data as $key => $value) {
-                                        echo "<img src=" . $value['filename'] . " alt='img' style='height:100px'>";
+                                if($GlobalData['assetno'] != ''){
+                                    try {
+                                        $dbConn = new dbConnection();
+                                        $conn = $dbConn->conn();
+                                        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                                        $query = "SELECT * from asset_files where assetno =?";
+                                        $stmt = $conn->prepare($query);
+                                        $stmt->execute([$GlobalData['assetno']]);
+                                        $db_data = $stmt->fetchAll();
+                                        foreach ($db_data as $key => $value) {
+                                            echo "<img src=" . $value['filename'] . " alt='img' style='height:100px'>";
+                                        }
+                                    } catch (\Throwable $th) {
+                                        var_dump($th);
                                     }
-                                } catch (\Throwable $th) {
-                                    var_dump($th);
                                 }
+                                
                                 ?>
 
                             </div>
