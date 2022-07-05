@@ -30,7 +30,7 @@ require('../static_components/header.php');
 
 <div class="container-fluid">
     <div class="container">
-        <table class="table asset-table" style="background-color: white;">
+        <table class="table phc-table" style="background-color: white;">
             <thead style="background: #f3f3f3;">
                 <tr>
                     <th><input type="checkbox"></th>
@@ -38,20 +38,13 @@ require('../static_components/header.php');
                     <th>Department</th>
                     <th>Location</th>
                     <th>Date</th>
+                    <th>Encoded By</th>
                     <th>Reviewed By</th>
                     <th>Remarks</th>
                 </tr>
             </thead>
             <div class="tbody">
-                <tr>
-                    <td><input type="checkbox"></td>
-                    <td>test</td>
-                    <td>test</td>
-                    <td>test</td>
-                    <td>test</td>
-                    <td>test</td>
-                    <td>test</td>
-                </tr>
+                
             </div>
         </table>
     </div>
@@ -122,7 +115,7 @@ require('../static_components/header.php');
 
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Physical Count Information</h5>
@@ -142,6 +135,8 @@ require('../static_components/header.php');
                             <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                         </div>
                     </div>
+                </div>
+                <div class="row">
                     <div class="col">
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing-sm">Department :</span>
@@ -153,6 +148,14 @@ require('../static_components/header.php');
                     <div class="col">
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing-sm">Date :</span>
+                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">Reviewed By :</span>
                             <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                         </div>
                     </div>
@@ -177,9 +180,33 @@ require('../static_components/header.php');
 require('../static_components/footer.php');
 ?>
 <script>
-    $('.asset-table').DataTable({
+    let table = $('.phc-table').DataTable({
         searching: false,
-        ordering: false,
-        select: true
+        "ajax" : {
+            "url" : "../clsController/physicalcount.php",
+            "type" : "POST",
+            "data" : "",
+            "error" : (error) => {
+                $('.phc-table tbody').empty()
+                $('.phc-table tbody').append("<tr><td colspan='8' style='text-align:center'>No Data Available</td></tr>")
+            },
+            "success" : (data) => {
+                if(data.length > 0 ){
+                    table.clear()
+                    data.forEach((loc) => {
+                        table.row.add([
+                            `<input type="checkbox" id="tbldata" value="${loc['cat_code']}">`,
+                            `${loc['phc_code']}`,
+                            `${loc['loc_code']}`,
+                            `${loc['dept_code']}`,
+                            `${loc['date']}`,
+                            `${loc['countedBy']}`,
+                            `${loc['reviewedBy']}`,
+                            `${loc['remarks']}`,
+                        ]).draw(false)
+                    })
+                }
+            }
+        }
     })
 </script>
