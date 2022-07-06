@@ -1,19 +1,25 @@
 <?php
 require('../static_components/header.php');
+ob_start();
+
+if (count($_GET) == 0) {
+    echo '<script>window.location.href="physicalcount.php"</script>';
+}
+
 ?>
 <div class="container" style="margin-top: 1rem;background-color:#f3f3f3; padding:1rem;">
     <div class="row">
         <div class="col-4">
             <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">PHC Code :</span>
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled>
+                <input type="text" class="form-control" aria-label="Sizing example input" id="phc_code" aria-describedby="inputGroup-sizing-sm" disabled value="<?php echo base64_decode($_GET['phc']) ?>">
             </div>
         </div>
 
         <div class="col-4">
             <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">Date :</span>
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled>
+                <input type="text" class="form-control" id="dte" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled>
             </div>
         </div>
     </div>
@@ -21,19 +27,19 @@ require('../static_components/header.php');
         <div class="col-4">
             <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">Location:</span>
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled id="location">
             </div>
         </div>
         <div class="col-4">
             <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">Department:</span>
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled>
+                <input type="text" class="form-control" aria-label="Sizing example input" id="department" aria-describedby="inputGroup-sizing-sm" disabled>
             </div>
         </div>
         <div class="col-4">
             <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">Checked By:</span>
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled>
+                <input type="text" class="form-control" aria-label="Sizing example input" id="checkedBy" aria-describedby="inputGroup-sizing-sm" disabled>
             </div>
         </div>
     </div>
@@ -41,7 +47,7 @@ require('../static_components/header.php');
         <div class="col-12">
             <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm"> Remarks :</span>
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled>
+                <input type="text" class="form-control" id="remarks" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled>
             </div>
         </div>
     </div>

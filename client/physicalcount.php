@@ -14,7 +14,7 @@ require('../model/clsConnection.php');
         <div class="col">
             <div class="d-grid gap-2 d-md-flex justify-content-md-start table-actions">
                 <button class="btn" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" style="border-radius: 2px; background-color:#f3f3f3"><i class="fa-solid fa-plus"></i> &nbsp; New Count</button>
-                <button class="btn" type="button" style="border-radius: 2px; background-color:#f3f3f3"><i class="fa-solid fa-pencil"></i> &nbsp; Edit Count</button>
+                <button class="btn" type="button" style="border-radius: 2px; background-color:#f3f3f3" onclick="edit()"><i class="fa-solid fa-pencil"></i> &nbsp; Edit Count</button>
                 <button class="btn" type="button" style="border-radius: 2px; background-color:#f3f3f3"><i class="fa-solid fa-trash"></i> &nbsp; Delete Count</button>
             </div>
         </div>
@@ -309,7 +309,7 @@ require('../static_components/footer.php');
                     table.clear()
                     data.forEach((loc) => {
                         table.row.add([
-                            `<input type="checkbox" id="tbldata" value="${loc['cat_code']}">`,
+                            `<input type="checkbox" id="tbldata" value="${loc['phc_code']}">`,
                             `${loc['phc_code']}`,
                             `${loc['loc_code']}`,
                             `${loc['dept_code']}`,
@@ -340,5 +340,26 @@ require('../static_components/footer.php');
                 }
             }
         })
+    }
+
+    function edit() {
+        if (getCheckedValues("tbldata").length == 1) {
+            window.location.href = `newphc.php?phc=${btoa(getCheckedValues("tbldata")[0])}`
+        } else if (getCheckedValues("tbldata").length == 0) {
+            alertify.error("Please select a asset")
+        } else if (getCheckedValues("tbldata").length > 1) {
+            alertify.error("One asset only should be selected")
+        }
+    }
+
+    function getCheckedValues(elemIdentyId) {
+        let values = [];
+        let checkboxes = document.querySelectorAll(`#${elemIdentyId}`);
+        checkboxes.forEach(element => {
+            if (element.checked) {
+                values.push(element.value)
+            }
+        });
+        return values
     }
 </script>
