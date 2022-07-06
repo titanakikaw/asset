@@ -83,3 +83,6 @@ button,a{
 .select2-search__field{
     font-size: 10px;
 }
+.select2-dropdown {
+    z-index:99999;
+}

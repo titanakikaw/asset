@@ -4,25 +4,26 @@ require('../model/clsConnection.php');
 require('../model/clsStandard.php');
 class MYPDF extends TCPDF
 {
-    private $company = 'Company Name'; 
+    private $company = 'Company Name';
     private $catFrom = '';
     private $catTo = '';
     private $deptFrom = '';
     private $deptTo = '';
-    public function setParameter($company, $catFrom, $catTo, $deptFrom, $deptTo){
-        if($company || $company != ''){
+    public function setParameter($company, $catFrom, $catTo, $deptFrom, $deptTo)
+    {
+        if ($company || $company != '') {
             $this->company = $company;
         }
-        if($catFrom || $catFrom != ''){
+        if ($catFrom || $catFrom != '') {
             $this->catFrom = $catFrom;
         }
-        if($catTo || $catTo != ''){
+        if ($catTo || $catTo != '') {
             $this->catTo = $catTo;
         }
-        if($deptFrom || $deptFrom != ''){
+        if ($deptFrom || $deptFrom != '') {
             $this->deptFrom = $deptFrom;
         }
-        if($deptTo || $deptTo != ''){
+        if ($deptTo || $deptTo != '') {
             $this->deptTo = $deptTo;
         }
     }
@@ -31,17 +32,17 @@ class MYPDF extends TCPDF
     {
         $html = '<table cellspacing="0" cellpadding="2">
                     <tr>
-                        <td colspan=""><h1>'.$this->company.'</h1></td>
+                        <td colspan=""><h1>' . $this->company . '</h1></td>
                     </tr>
                     <tr>
-                        <td colspan=""><h3>ASSET REPORT</h3></td>
+                        <td colspan=""><h3>SAMPLE REPORT</h3></td>
                     </tr>
                     <tr>
                         <td style="font-size:9px;width:100px;">Category [ FROM ] :</td>
-                        <td style="font-size:9px;width:100px;">'.$this->catFrom.'</td>
+                        <td style="font-size:9px;width:100px;">' . $this->catFrom . '</td>
                         <td style="font-size:9px;width:70px;"></td>
                         <td style="font-size:9px;width:100px;">Category [ TO ] :</td>
-                        <td style="font-size:9px;width:100px;">'.$this->catTo.'</td>
+                        <td style="font-size:9px;width:100px;">' . $this->catTo . '</td>
                         <td style="font-size:9px;width:70px;"></td>
                         <td style="font-size:9px;width:70px;"></td>
                         <td style="font-size:9px;width:70px;"></td>
@@ -54,10 +55,10 @@ class MYPDF extends TCPDF
                     </tr>
                     <tr>
                         <td style="font-size:9px;width:100px;">Department [ FROM ] :</td>
-                        <td style="font-size:9px;width:100px;">'.$this->deptFrom.'</td>
+                        <td style="font-size:9px;width:100px;">' . $this->deptFrom . '</td>
                         <td style="font-size:9px;width:70px;"></td>
                         <td style="font-size:9px;width:100px;">Department [ TO ] :</td>
-                        <td style="font-size:9px;width:80px;">'.$this->deptTo.'</td>
+                        <td style="font-size:9px;width:80px;">' . $this->deptTo . '</td>
                         <td style="font-size:9px;width:70px;"></td>
                         <td style="font-size:9px;width:70px;"></td>
                         <td style="font-size:9px;width:70px;"></td>
@@ -96,18 +97,17 @@ $query = "SELECT a.* , b.description as status from assets as a INNER JOIN statu
 $clsController = new clsController('', '');
 $assetData = $clsController->list_custom($query, []);
 foreach ($assetData as $key => $value) {
-  
+
     $query = "SELECT CONCAT(b.lname,', ', b.fname,' ', b.mi) as name from emp_asset_assigned as a inner join employee as b where assetno=?";
     $assignedData = $clsController->list_custom($query, [$value['assetno']]);
-    if(count($assignedData) > 0){
+    if (count($assignedData) > 0) {
         $assetData[$key]['name'] = $assignedData[0]['name'];
     }
-    
 }
 
 
 $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-$pdf->setParameter('DRISM TECHN SOLUTIONS Inc.', '22-05-2022', '23-05-2022','HO','BRANCH ONE');
+$pdf->setParameter('', '22-05-2022', '23-05-2022', 'HO', 'BRANCH ONE');
 $pdf->SetHeaderMargin(4);
 $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 $pdf->setAutoPageBreak(true, 23);
@@ -122,21 +122,21 @@ $html = '<table cellspacing="" cellpadding="2" >
 
 foreach ($assetData as $key => $value) {
     $html .= '<tr>
-                    <td style="font-size:9px;width:70px">'.$value['assetno'].'</td>
-                    <td style="font-size:9px;width:70px">'.$value['description'].'</td>
-                    <td style="font-size:9px;width:70px">'.$value['cat_code'].'</td>
-                    <td style="font-size:9px;width:70px">'.$value['dept_code'].'</td>
-                    <td style="font-size:9px;width:70px">'.$value['loc_code'].'</td>
-                    <td style="font-size:9px;width:70px">'.$value['dtefrom'].'</td>
-                    <td style="font-size:9px;width:70px">'.$value['dteto'].'</td>
-                    <td style="font-size:9px;width:70px">'.$value['status'].'</td>
-                    <td style="font-size:9px;width:50px">'.$value['usefullife'].'</td>
-                    <td style="font-size:9px;width:70px">'.$value['cost'].'</td>
-                    <td style="font-size:9px;width:40px">'.$value['qty'].'</td>
-                    <td style="font-size:9px;width:70px">'.$value['salvalue'].'</td>
-                    <td style="font-size:9px;width: 60px;">PHP '.$value['monthlydep'].'</td>
-                    <td style="font-size:9px;width: 60px;">PHP '.$value['annualdep'].'</td>
-                    <td style="font-size:9px;">'.$value['name'].'</td>
+                    <td style="font-size:9px;width:70px">' . $value['assetno'] . '</td>
+                    <td style="font-size:9px;width:70px">' . $value['description'] . '</td>
+                    <td style="font-size:9px;width:70px">' . $value['cat_code'] . '</td>
+                    <td style="font-size:9px;width:70px">' . $value['dept_code'] . '</td>
+                    <td style="font-size:9px;width:70px">' . $value['loc_code'] . '</td>
+                    <td style="font-size:9px;width:70px">' . $value['dtefrom'] . '</td>
+                    <td style="font-size:9px;width:70px">' . $value['dteto'] . '</td>
+                    <td style="font-size:9px;width:70px">' . $value['status'] . '</td>
+                    <td style="font-size:9px;width:50px">' . $value['usefullife'] . '</td>
+                    <td style="font-size:9px;width:70px">' . $value['cost'] . '</td>
+                    <td style="font-size:9px;width:40px">' . $value['qty'] . '</td>
+                    <td style="font-size:9px;width:70px">' . $value['salvalue'] . '</td>
+                    <td style="font-size:9px;width: 60px;">PHP ' . $value['monthlydep'] . '</td>
+                    <td style="font-size:9px;width: 60px;">PHP ' . $value['annualdep'] . '</td>
+                    <td style="font-size:9px;">' . $value['name'] . '</td>
                 </tr>';
 }
 

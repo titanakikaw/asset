@@ -1,5 +1,6 @@
 <?php
 require('../static_components/header.php');
+require('../model/clsConnection.php');
 ?>
 <div class="container" style="margin-top:1rem; padding: 5px;">
     <div class="row">
@@ -37,14 +38,14 @@ require('../static_components/header.php');
                     <th>PHC Code</th>
                     <th>Department</th>
                     <th>Location</th>
-                    <th>Date</th>
+                    <th>Date & Time</th>
                     <th>Encoded By</th>
                     <th>Reviewed By</th>
                     <th>Remarks</th>
                 </tr>
             </thead>
             <div class="tbody">
-                
+
             </div>
         </table>
     </div>
@@ -115,83 +116,196 @@ require('../static_components/header.php');
 
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Physical Count Information</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="input-group input-group-sm mb-3">
-                        <span class="input-group-text" id="inputGroup-sizing-sm">PHC Code :</span>
-                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                    </div>
+    <form id="formPHC">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Physical Count Information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="row">
-                    <div class="col">
+                <div class="modal-body">
+                    <div class="row">
                         <div class="input-group input-group-sm mb-3">
-                            <span class="input-group-text" id="inputGroup-sizing-sm">Location :</span>
-                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">PHC Code :</span>
+                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[phc_code]">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Location :</span>
+                                <select class="form-select" id="loc_new" name="data[loc_code]" style="width:100%">
+                                    <?php
+                                    try {
+                                        $dbConn = new dbConnection();
+                                        $conn = $dbConn->conn();
+                                        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                                        $query = "SELECT * from location";
+                                        $stmt = $conn->prepare($query);
+                                        $stmt->execute();
+                                        $db_data = $stmt->fetchAll();
+                                        foreach ($db_data as $key => $value) {
+                                            if ($value['loc_code'] == $GlobalData['loc_code']) {
+                                                $selected = "selected";
+                                            } else {
+                                                $selected = "";
+                                            }
+                                            echo "<option value='" . $value['loc_code'] . "'  $selected >" . $value['description'] . "</option>";
+                                        }
+                                    } catch (\Throwable $th) {
+                                        var_dump($th);
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <!-- <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Location :</span>
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[loc_code]">
+                            </div> -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Department :</span>
+                                <select class="form-select" id="dept" name="data[dept_code]" style="width:100%">
+                                    <?php
+                                    try {
+                                        $dbConn = new dbConnection();
+                                        $conn = $dbConn->conn();
+                                        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                                        $query = "SELECT * from department";
+                                        $stmt = $conn->prepare($query);
+                                        $stmt->execute();
+                                        $db_data = $stmt->fetchAll();
+                                        foreach ($db_data as $key => $value) {
+                                            if ($value['dept_code'] == $GlobalData['dept_code']) {
+                                                $selected = "selected";
+                                            } else {
+                                                $selected = "";
+                                            }
+                                            echo "<option value='" . $value['dept_code'] . "'  $selected >" . $value['description'] . "</option>";
+                                        }
+                                    } catch (\Throwable $th) {
+                                        var_dump($th);
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                            <!-- <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Department :</span>
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[dept_code]">
+                            </div> -->
+                        </div>
+                    </div>
+                    <!-- <div class="row">
+                        <div class="col">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Date :</span>
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[date]">
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Counted By :</span>
+                                <select class="form-select" id="emp_counted" name="data[countedBy]" style="width:100%">
+                                    <?php
+                                    try {
+                                        $dbConn = new dbConnection();
+                                        $conn = $dbConn->conn();
+                                        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                                        $query = "SELECT * from employee";
+                                        $stmt = $conn->prepare($query);
+                                        $stmt->execute();
+                                        $db_data = $stmt->fetchAll();
+                                        foreach ($db_data as $key => $value) {
+                                            echo "<option value='" . $value['empno'] . "'  $selected >" . $value['lname'] . ", " . $value['fname'] . "</option>";
+                                        }
+                                    } catch (\Throwable $th) {
+                                        var_dump($th);
+                                    }
+                                    ?>
+                                </select>
+                                <!-- <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[countedBy]"> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Reviewed By :</span>
+                                <select class="form-select" id="emp_reviewed" name="data[reviewedBy]" style="width:100%">
+                                    <?php
+                                    try {
+                                        $dbConn = new dbConnection();
+                                        $conn = $dbConn->conn();
+                                        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                                        $query = "SELECT * from employee";
+                                        $stmt = $conn->prepare($query);
+                                        $stmt->execute();
+                                        $db_data = $stmt->fetchAll();
+                                        foreach ($db_data as $key => $value) {
+                                            echo "<option value='" . $value['empno'] . "'  $selected >" . $value['lname'] . ", " . $value['fname'] . "</option>";
+                                        }
+                                    } catch (\Throwable $th) {
+                                        var_dump($th);
+                                    }
+                                    ?>
+                                </select>
+                                <!-- <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[reviewedBy]"> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Remarks :</span>
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[remarks]">
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col">
-                        <div class="input-group input-group-sm mb-3">
-                            <span class="input-group-text" id="inputGroup-sizing-sm">Department :</span>
-                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                        </div>
-                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="save()">Close</button>
+
+                    <a href="newphc.php" type="button" class="btn btn-primary" style="display: hidden;">Save</a>
                 </div>
-                <div class="row">
-                    <div class="col">
-                        <div class="input-group input-group-sm mb-3">
-                            <span class="input-group-text" id="inputGroup-sizing-sm">Date :</span>
-                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <div class="input-group input-group-sm mb-3">
-                            <span class="input-group-text" id="inputGroup-sizing-sm">Reviewed By :</span>
-                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <div class="input-group input-group-sm mb-3">
-                            <span class="input-group-text" id="inputGroup-sizing-sm">Reviewed By :</span>
-                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <a href="newphc.php" type="button" class="btn btn-primary">Save</a>
             </div>
         </div>
-    </div>
+    </form>
 </div>
 <?php
 require('../static_components/footer.php');
 ?>
 <script>
+    $(document).ready(() => {
+        $('#emp_counted').select2()
+        $('#emp_reviewed').select2()
+        $('#loc_new').select2()
+        $('#dept').select2()
+    })
+
+
     let table = $('.phc-table').DataTable({
         searching: false,
-        "ajax" : {
-            "url" : "../clsController/physicalcount.php",
-            "type" : "POST",
-            "data" : "",
-            "error" : (error) => {
+        "ajax": {
+            "url": "../clsController/physicalcount.php",
+            "type": "POST",
+            "data": {
+                "action": 'table'
+            },
+            "error": (error) => {
+                console.log(error)
                 $('.phc-table tbody').empty()
                 $('.phc-table tbody').append("<tr><td colspan='8' style='text-align:center'>No Data Available</td></tr>")
             },
-            "success" : (data) => {
-                if(data.length > 0 ){
+            "success": (data) => {
+
+                if (data.length > 0) {
                     table.clear()
                     data.forEach((loc) => {
                         table.row.add([
@@ -209,4 +323,22 @@ require('../static_components/footer.php');
             }
         }
     })
+
+    function save() {
+        let formData = $('#formPHC').serialize();
+        $.ajax({
+            url: "../clsController/physicalcount.php",
+            type: "POST",
+            data: formData + '&action=new',
+            error: (error) => {
+                console.log(error)
+            },
+            success: (data) => {
+                $('.asset-table').DataTable().ajax.reload();
+                if (data) {
+                    window.location.href = "newphc.php"
+                }
+            }
+        })
+    }
 </script>

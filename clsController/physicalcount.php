@@ -1,11 +1,13 @@
 <?php
 require('../model/clsStandard.php');
 require('../model/clsConnection.php');
+date_default_timezone_set("Asia/Manila");
 
 switch ($_POST['action']) {
     case 'new':
         $col = $_POST['data'];
-        $clsController = new clsController($col, 'category');
+        $col['date'] = date("m-d-Y h:i:s");;
+        $clsController = new clsController($col, 'asset_physical_count');
         echo json_encode($clsController->add());
         break;
     case 'delete':
@@ -23,9 +25,11 @@ switch ($_POST['action']) {
         break;
 
     case 'table':
-        $clsController = new clsController('', 'category');
+
+        $clsController = new clsController('', 'asset_physical_count');
         if ($clsController->viewlist()) {
             echo json_encode($clsController->viewlist());
+            // var_dump('test');
         }
 
         break;
