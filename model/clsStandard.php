@@ -87,9 +87,9 @@ class clsController
             $clsConnection = new dbConnection();
             $conn = $clsConnection->conn();
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $query = "SELECT * from `$this->table` where $this->column=?";
+            $query = "SELECT * from `$this->table` where $this->columns=?";
             $stmt = $conn->prepare($query);
-            $stmt->execute([$this->data]);
+            $stmt->execute($this->data);
             $dbData = $stmt->fetch();
             return $dbData;
         } catch (\Throwable $th) {
@@ -97,11 +97,12 @@ class clsController
             return false;
             die();
         }
-    }
+    }   
 
     function get2($table, $columns){
         $condition = '';
         $data = [];
+        
         foreach ($columns as $key => $value) {
             if($condition != ''){
                 $condition .= " AND ";
@@ -114,6 +115,7 @@ class clsController
             $conn = $clsConnection->conn();
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $query = "SELECT * from `$table` where $condition";
+            
             $stmt = $conn->prepare($query);
             $stmt->execute( $data);
             $dbData = $stmt->fetchAll();
@@ -242,4 +244,13 @@ class clsController
             return false;
         }
     }
+    function fullcustom($query){
+        $clsConnection = new dbConnection();
+        $conn = $clsConnection->conn();
+        $query = $query;
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
+        $data = $stmt->fetchAll();
+        return $data;
+    }   
 }
