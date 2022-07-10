@@ -91,13 +91,47 @@ class MYPDF extends TCPDF
         $this->writeHTML($html, true, false, false, false, '');
     }
 }
+$xdata = $_GET['data'];
+$condition = "";
+if ($xdata['dteFrom'] != '') {
+    $condition .= "dtefrom = '" . $xdata['dteFrom'] . "'";
+    $condition .= " AND ";
+}
+if ($xdata['dteTo'] != '') {
+    $condition .= "dteto = '" . $xdata['dteTo'] . "'";
+    $condition .= " AND ";
+}
+
+if ($xdata["cat_code_from"] != '' || $xdata['cat_code_to'] != '') {
+    if ($xdata["cat_code_from"] != '') {
+        $condition .= "cat_code <= '" . $xdata["cat_code_from"] . "'";
+        $condition .= " AND ";
+    }
+    if ($xdata['cat_code_to'] != '') {
+        $condition .= "cat_code >= '" . $xdata["cat_code_from"] . "'";
+    }
+}
+if ($xdata["dept_code_from"] != '' || $xdata['dept_code_to'] != '') {
+    $condition .= " AND ";
+    if ($xdata["dept_code_from"] != '') {
+        $condition .= "dept_code <= '" . $xdata["dept_code_from"] . "'";
+        $condition .= " AND ";
+    }
+    if ($xdata['dept_code_to'] != '') {
+        $condition .= "dept_code >= '" . $xdata["dept_code_to"] . "'";
+    }
+}
+
+if ($condition != '') {
+    $condition = "where " . $condition;
+}
+
 
 $assetData = array();
-$query = "SELECT a.* , b.description as status from assets as a INNER JOIN status as b on a.status_code = b.status_code";
+$query = "SELECT a.* , b.description as status from assets as a INNER JOIN status as b on a.status_code = b.status_code  $condition";
 $clsController = new clsController('', '');
 $assetData = $clsController->list_custom($query, []);
 foreach ($assetData as $key => $value) {
-
     $query = "SELECT CONCAT(b.lname,', ', b.fname,' ', b.mi) as name from emp_asset_assigned as a inner join employee as b where assetno=?";
     $assignedData = $clsController->list_custom($query, [$value['assetno']]);
     if (count($assignedData) > 0) {
@@ -107,7 +141,7 @@ foreach ($assetData as $key => $value) {
 
 
 $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-$pdf->setParameter('', '22-05-2022', '23-05-2022', 'HO', 'BRANCH ONE');
+$pdf->setParameter('', $xdata["cat_code_from"], $xdata["cat_code_to"], $xdata["dept_code_from"], $xdata["dept_code_to"]);
 $pdf->SetHeaderMargin(4);
 $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 $pdf->setAutoPageBreak(true, 23);
