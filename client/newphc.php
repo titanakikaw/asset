@@ -151,8 +151,6 @@ if (count($_GET) == 0) {
 </div>
 
 
-
-
 <?php
 require('../static_components/footer.php');
 ?>
@@ -295,7 +293,7 @@ require('../static_components/footer.php');
         if(status > 0){
             let pendingAssets = "";
             importAssets.forEach(element => {
-                pendingAssets += `<tr><td><input type="checkbox" value="${element['assetno']}"></td><td><p id="assetno">${element['assetno']}</p></td><td>${element['description']}</td><td>${element['cat_code']}</td><td>${element['qty']}</td></tr>`
+                pendingAssets += `<tr><td><input type="checkbox" id="tbldata" value="new"></td><td><p id="assetno">${element['assetno']}</p></td><td>${element['description']}</td><td>${element['cat_code']}</td><td>${element['qty']}</td></tr>`
             });
             if($('.asset-table-final tbody tr td')[0].innerText == "No Data Available"){
                 $('.asset-table-final tbody').empty()
@@ -307,5 +305,14 @@ require('../static_components/footer.php');
                 alertify.error("No asset selected, Please try again")
                 status++;
             }
+    }
+
+    function save(){
+        let assets = document.querySelectorAll('.asset-table-final tbody tr input[type="checkbox"]')
+        assets.forEach(element => { 
+            if(element.value == "new"){
+                console.log(element.parentElement.parentElement)
+            }
+        });
     }
 </script>
