@@ -7,8 +7,11 @@ switch ($_POST['action']) {
         $col = $_POST['data'];
         $files = $_POST['file'];
         $col['cost'] = str_replace(" ", "", str_replace("PHP", "", $col['cost']));
+        $col['totalcost'] = str_replace(" ", "", str_replace("PHP", "", $col['totalcost']));
         $col['salvalue'] = str_replace(" ", "", str_replace("PHP", "", $col['salvalue']));
-        $deprecialbleCost =  $col['cost'] -  $col['salvalue'];
+
+        $totalcost =  $col['totalcost'] * $col['qty'];
+        $deprecialbleCost =  $totalcost -  $col['salvalue'];
         $col['monthlydep'] =  $deprecialbleCost / $col['usefullife'];
         if ($col['usefullife'] < 12) {
             $col['annualdep'] = 0;
@@ -86,13 +89,12 @@ switch ($_POST['action']) {
         $clsController = new clsController('', '');
         $assetData = $clsController->list_custom($query, []);
         foreach ($assetData as $key => $value) {
-          
+
             $query = "SELECT CONCAT(b.lname,', ', b.fname,' ', b.mi) as name from emp_asset_assigned as a inner join employee as b where assetno=?";
             $assignedData = $clsController->list_custom($query, [$value['assetno']]);
-            if(count($assignedData) > 0){
+            if (count($assignedData) > 0) {
                 $assetData[$key]['name'] = $assignedData[0]['name'];
             }
-            
         }
         echo json_encode($assetData);
         break;

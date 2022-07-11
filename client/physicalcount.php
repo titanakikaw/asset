@@ -52,7 +52,7 @@ require('../model/clsConnection.php');
 </div>
 
 
-<div class="offcanvas offcanvas-end filter-asset" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel" style="width: 500px;">
+<div class="offcanvas offcanvas-end filter-asset" id="offcanvasRight" aria-labelledby="offcanvasRightLabel" style="width: 500px;">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="offcanvasRightLabel">Filter Asset</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -115,7 +115,7 @@ require('../model/clsConnection.php');
 
 
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <form id="formPHC">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -283,10 +283,18 @@ require('../static_components/footer.php');
 ?>
 <script>
     $(document).ready(() => {
-        $('#emp_counted').select2()
-        $('#emp_reviewed').select2()
-        $('#loc_new').select2()
-        $('#dept').select2()
+        $('#emp_counted').select2({
+            dropdownParent: $('.modal-dialog')[0]
+        })
+        $('#emp_reviewed').select2({
+            dropdownParent: $('.modal-dialog')[0]
+        })
+        $('#loc_new').select2({
+            dropdownParent: $('.modal-dialog')[0]
+        })
+        $('#dept').select2({
+            dropdownParent: $('.modal-dialog')[0]
+        })
     })
 
 

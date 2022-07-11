@@ -2,7 +2,7 @@
 require('../static_components/header.php');
 require('../model/clsConnection.php');
 $GlobalData['loc_code'] = '';
-$GlobalData['dept_code'] ='';
+$GlobalData['dept_code'] = '';
 $GlobalData['status_code'] = '';
 $GlobalData['assetno'] = '';
 $GlobalData['modelno'] = '';
@@ -11,12 +11,13 @@ $GlobalData['description'] = '';
 $GlobalData['dtefrom'] = '';
 $GlobalData['dteto'] = '';
 $GlobalData['cost'] = '';
+$GlobalData['totalcost'] = '';
 $GlobalData['qty'] = '';
 $GlobalData['annualdep'] = '';
 $GlobalData['monthlydep'] = '';
 $GlobalData['salvalue'] = '';
 $GlobalData['usefullife'] = '';
-if(isset($_GET['asset'])){
+if (isset($_GET['asset'])) {
     if (base64_decode($_GET['asset']) != '') {
         // var_dump("test");
         try {
@@ -29,10 +30,8 @@ if(isset($_GET['asset'])){
             $GlobalData = $stmt->fetch();
         } catch (\Throwable $th) {
             var_dump($th);
-        
         }
     }
-    
 }
 
 ?>
@@ -217,11 +216,12 @@ if(isset($_GET['asset'])){
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Quantity :</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[qty]" value="<?php echo $GlobalData['qty'] ? $GlobalData['qty'] : '' ?>">
+                                <input type="text" class="form-control" id="txtqty" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[qty]" value="<?php echo $GlobalData['qty'] ? $GlobalData['qty'] : '' ?>">
                             </div>
                         </div>
                     </div>
                     <div class="row">
+
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Useful Lifecycle (months):</span>
@@ -261,6 +261,14 @@ if(isset($_GET['asset'])){
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">By Percentage:</span>
                                 <input type="text" class="form-control" onkeyup="moneyFormat(this, 'percentage'),calcPerAmount(),calcDep()" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="txtByPercent" disabled name="data[salpercent]" value="<?php echo $GlobalData['salvalue'] ?  "PHP " . $GlobalData['salpercent'] : '' ?>">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Total Asset Cost :</span>
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[totalcost]" id="txttotalcost" value="<?php echo $GlobalData['totalcost'] ? $GlobalData['totalcost'] : '' ?>" disabled>
                             </div>
                         </div>
                     </div>
@@ -310,7 +318,7 @@ if(isset($_GET['asset'])){
                         <div class="col">
                             <div class="d-flex justify-content-evenly img-container" style="background-color: white; padding: 5px">
                                 <?php
-                                if($GlobalData['assetno'] != ''){
+                                if ($GlobalData['assetno'] != '') {
                                     try {
                                         $dbConn = new dbConnection();
                                         $conn = $dbConn->conn();
@@ -326,7 +334,7 @@ if(isset($_GET['asset'])){
                                         var_dump($th);
                                     }
                                 }
-                                
+
                                 ?>
 
                             </div>
@@ -594,11 +602,12 @@ require('../static_components/footer.php');
         let Depreciation = $('#txtdepreciation');
         let AnnualDepreciation = $('#txtannualdepreciation');
         let assetAmount = $('#txtAssetAmount').val()
+        let totalquantity = $('#txtqty').val();
+        let totalCost = $('#txttotalcost');
 
         assetAmount = assetAmount.replace("PHP ", "")
         SalvageValue = SalvageValue.replace("PHP ", "")
         assetAmount = parseFloat(assetAmount.replace(" PHP ", ''));
-        console.log(assetAmount)
         SalvageValue = parseFloat(SalvageValue.replace(" PHP ", ''));
 
         if (assetAmount == '') {
@@ -611,10 +620,12 @@ require('../static_components/footer.php');
             UsefulLife = 0
         }
 
-
-        const deprecialbleCost = assetAmount - SalvageValue;
+        const totalAssetCost = assetAmount * totalquantity;
+        const deprecialbleCost = totalAssetCost - SalvageValue;
         const monthlyDepreciation = deprecialbleCost / UsefulLife;
 
+
+        totalCost.val(totalAssetCost)
         Depreciation.val(monthlyDepreciation)
         if (UsefulLife >= 12) {
             AnnualDepreciation.val(monthlyDepreciation * 12);
@@ -624,6 +635,7 @@ require('../static_components/footer.php');
 
         moneyFormat($('#txtdepreciation')[0], 'currency')
         moneyFormat($('#txtannualdepreciation')[0], 'currency')
+        moneyFormat($('#txttotalcost')['0'], 'currency')
     }
 
     function previewImages() {

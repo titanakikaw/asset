@@ -45,7 +45,7 @@ ul li a {
 }
 
 .offcanvas {
-  z-index: 99999999;
+  z-index: 9999999;
 }
 
 .input-group-text {
@@ -85,11 +85,11 @@ button, a {
 }
 
 .select2-dropdown {
-  z-index: 99999;
+  z-index: 999;
 }
 
 span.select2-container {
-  z-index: 10050;
+  z-index: 100;
 }
 
 .reports li {
