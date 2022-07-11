@@ -2,13 +2,29 @@
 require('../static_components/header.php');
 require('../model/clsConnection.php');
 ?>
-<div class="container" style="margin-top:1rem; padding: 5px;">
+
+<div class="reports container" style="margin-top:1rem; padding: 5px;">
     <h4>REPORTS</h4>
     <hr>
     <ul>
         <li>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Asset Reports
+                Asset Report
+            </button>
+        </li>
+        <li>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Asset Report By Assignment
+            </button>
+        </li>
+        <li>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Asset Report By Additional Cost
+            </button>
+        </li>
+        <li>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Physical Count
             </button>
         </li>
     </ul>
