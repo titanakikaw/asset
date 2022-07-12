@@ -682,7 +682,7 @@ require('../static_components/footer.php');
                 url: "../clsController/asset.php",
                 type: "POST",
                 contentType: 'application/x-www-form-urlencoded',
-                data: $('#form-asset').serialize() + `&data[annualdep]=${$('#txtannualdepreciation').val()}` + `&data[monthlydep]=${$('#txtdepreciation').val()}&` + getFiles() + '&action=new',
+                data: $('#form-asset').serialize() + `&data[annualdep]=${$('#txtannualdepreciation').val() ? $('#txtannualdepreciation').val() : 0}` + `&data[monthlydep]=${$('#txtdepreciation').val()}&` + `data[totalcost]=${$('#txttotalcost').val()}` + getFiles() + '&action=new',
                 error: (error) => {
                     console.log(error)
                 },
@@ -693,7 +693,6 @@ require('../static_components/footer.php');
                         alertify.success("Asset Saved")
                         alertify.confirm('Asset Notification', 'Would you like to assign this asset to an employee ?',
                             function() {
-
                                 $('#assginBtn').click()
 
                             },
@@ -702,7 +701,7 @@ require('../static_components/footer.php');
                                 window.location.replace("assets.php");
                             }
                         );
-                        clearInputs()
+                        // clearInputs()
                     } else {
                         alertify.warning("Error in saving, Please check all valid fields.")
                     }

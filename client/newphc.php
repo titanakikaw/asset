@@ -272,8 +272,11 @@ require('../static_components/footer.php');
                 let rawAsset = [];
                 let parentElem = element.parentElement.parentElement;
                 let assetQty = parentElem.querySelector('#assetqty').innerText;
+
                 let importQty = parentElem.querySelector('input[type="number"]')
-                if (importQty.value > assetQty || importQty.value <= 0) {
+                // console.log(typeof assetQty)
+                if (parseInt(assetQty) < importQty.value) {
+                    // console.log(assetQty)
                     importQty.style.border = "1px solid red"
                     alertify.warning("Import quantity invalid, Please try again")
                 } else if (importQty.value == '') {
