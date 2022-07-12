@@ -110,7 +110,7 @@ $TotalVarianceValue  = 0;
 $clsController = new clsController('', '');
 $query = "SELECT a.*, b.description, b.qty as onhand_qty,b.cost, c.description as category
 from phc_assets as a LeFT JOIN assets as b on a.assetno = b.assetno 
-INNER JOIN category as c on b.cat_code = c.cat_code where phc_code = 'test' ORDER BY category DESC";
+INNER JOIN category as c on b.cat_code = c.cat_code where phc_code = 'PHC01' ORDER BY category DESC";
 $data  = $clsController->list_custom($query, []);
 
 foreach ($data as $key => $value) {

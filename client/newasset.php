@@ -264,7 +264,7 @@ if (isset($_GET['asset'])) {
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">By Percentage:</span>
-                                <input type="text" class="form-control" onkeyup="moneyFormat(this, 'percentage'),calcPerAmount(),calcDep()" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="txtByPercent" disabled name="data[salpercent]" value="<?php echo $GlobalData['salvalue'] ?  "PHP " . $GlobalData['salpercent'] : '' ?>">
+                                <input type="text" class="form-control" onkeyup="moneyFormat(this, 'percentage'),calcPerAmount(),calcDep()" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="txtByPercent" disabled name="data[salpercent]" value="<?php echo $GlobalData['salpercent'] ?  "PHP " . $GlobalData['salpercent'] : '' ?>">
                             </div>
                         </div>
                     </div>
@@ -332,7 +332,12 @@ if (isset($_GET['asset'])) {
                                         $stmt->execute([$GlobalData['assetno']]);
                                         $db_data = $stmt->fetchAll();
                                         foreach ($db_data as $key => $value) {
-                                            echo "<img src=" . $value['filename'] . " alt='img' style='height:100px'>";
+                                            echo "<div class='card'>
+                                                    <img src=" . $value['filename'] . " alt='img' style='height:100px'>
+                                                    <div class='card-body'>
+                                                        <button  class='btn btn-danger'><i class='fa-solid fa-trash'></i>&nbsp;Remove</button>                                       
+                                                    </div>
+                                                    </div>";
                                         }
                                     } catch (\Throwable $th) {
                                         var_dump($th);
@@ -764,12 +769,13 @@ require('../static_components/footer.php');
                     url: "../clsController/asset.php",
                     type: "POST",
                     contentType: 'application/x-www-form-urlencoded',
-                    data: $('#form-asset').serialize() + `&data[annualdep]=${$('#txtannualdepreciation').val() ? $('#txtannualdepreciation').val() : 0}` + `&data[monthlydep]=${$('#txtdepreciation').val()}&` + `data[totalcost]=${$('#txttotalcost').val()}` + `&data[assetno]=${$('#assetno').val()}` + getFiles() + '&action=update',
+                    data: $('#form-asset').serialize() + `&data[annualdep]=${$('#txtannualdepreciation').val() ? $('#txtannualdepreciation').val() : 0}` + `&data[monthlydep]=${$('#txtdepreciation').val()}&` + `data[totalcost]=${$('#txttotalcost').val()}` + `&data[assetno]=${$('#assetno').val()}&` + `&` + `data[salvalue]=${$('#txtByAmount').val()}&` + getFiles() + '&action=update',
                     error: (error) => {
                         console.log(error)
                     },
                     success: (data) => {
                         if (data) {
+                            saveImages()
                             alertify.success("Asset Updated")
                         }
                     }
@@ -782,28 +788,31 @@ require('../static_components/footer.php');
 
     function saveImages() {
         let images = $('#formFileMultiple').prop("files");
-        let formdata = new FormData();
-        for (let index = 0; index < images.length; index++) {
-            formdata.append("file[]", images[index])
-        }
-        formdata.append('action', "saveImages")
-        $.ajax({
-            url: "../clsController/asset.php",
-            type: "POST",
-            processData: false,
-            contentType: false,
-            cache: false,
-            data: formdata,
-            enctype: 'multipart/form-data',
-            error: (error) => {
-                console.log(error)
-            },
-            success: (data) => {
-                if (data) {
-                    alertify.success("Images successfully saved")
-                }
+        if (images.lenght > 0) {
+            let formdata = new FormData();
+            for (let index = 0; index < images.length; index++) {
+                formdata.append("file[]", images[index])
             }
-        })
+            formdata.append('action', "saveImages")
+            $.ajax({
+                url: "../clsController/asset.php",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                cache: false,
+                data: formdata,
+                enctype: 'multipart/form-data',
+                error: (error) => {
+                    console.log(error)
+                },
+                success: (data) => {
+                    if (data) {
+                        alertify.success("Images successfully saved")
+                    }
+                }
+            })
+        }
+
     }
 
     function checkforminput() {

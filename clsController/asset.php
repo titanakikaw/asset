@@ -4,6 +4,7 @@ require('../model/clsConnection.php');
 date_default_timezone_set("Asia/Manila");
 switch ($_POST['action']) {
     case 'new':
+
         $col = $_POST['data'];
         $files = $_POST['file'];
         $col['cost'] = str_replace(" ", "", str_replace("PHP", "", $col['cost']));
@@ -57,6 +58,13 @@ switch ($_POST['action']) {
             $col['annualdep'] = 0;
         } else {
             $col['annualdep'] = $col['monthlydep'] * 12;
+        }
+        foreach ($files as $key => $value) {
+            $assetFile['assetno'] = $col['assetno'];
+            $assetFile['directory'] = '../assetImages';
+            $assetFile['filename'] = $assetFile['directory'] . '/' . $value;
+            $clsController = new clsController($assetFile, 'asset_files');
+            var_dump($clsController->add());
         }
         $clsController = new clsController($col, 'assets');
         echo json_encode($clsController->update($_POST['data']['assetno'], 'assetno'));
