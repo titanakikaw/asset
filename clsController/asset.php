@@ -98,4 +98,19 @@ switch ($_POST['action']) {
         }
         echo json_encode($assetData);
         break;
+    case 'getaddedcost':
+        $clsController = new clsController('', '');
+        $query = "SELECT * from asset_additional_cost where assetno = ?";
+        echo json_encode($clsController->list_custom($query, [$_POST['assetno']]));
+        break;
+    case 'saveAddedCost':
+        $col = $_POST['data'];
+        $clsController = new clsController($col, 'asset_additional_cost');
+        echo json_encode($clsController->add());
+        break;
+    case 'deleteCost':
+        $xdata['master_id'] = $_POST['id'];
+        $clsController = new clsController($xdata, 'asset_additional_cost');
+        echo json_encode($clsController->delete());
+        break;
 }

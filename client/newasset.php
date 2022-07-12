@@ -17,9 +17,9 @@ $GlobalData['annualdep'] = '';
 $GlobalData['monthlydep'] = '';
 $GlobalData['salvalue'] = '';
 $GlobalData['usefullife'] = '';
+$hidden = 'hidden';
 if (isset($_GET['asset'])) {
     if (base64_decode($_GET['asset']) != '') {
-        // var_dump("test");
         try {
             $dbConn = new dbConnection();
             $conn = $dbConn->conn();
@@ -31,6 +31,7 @@ if (isset($_GET['asset'])) {
         } catch (\Throwable $th) {
             var_dump($th);
         }
+        $hidden = '';
     }
 }
 
@@ -268,7 +269,7 @@ if (isset($_GET['asset'])) {
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Total Asset Cost :</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[totalcost]" id="txttotalcost" value="<?php echo $GlobalData['totalcost'] ? $GlobalData['totalcost'] : '' ?>" disabled>
+                                <input type="text" class="form-control" aria-label="Sizing example input" onchange="moneyFormat(this, 'currency')" aria-describedby="inputGroup-sizing-sm" name="data[totalcost]" id="txttotalcost" value="<?php echo $GlobalData['totalcost'] ? "PHP " . $GlobalData['totalcost'] : '' ?>" disabled>
                             </div>
                         </div>
                     </div>
@@ -340,7 +341,7 @@ if (isset($_GET['asset'])) {
                             </div>
                         </div>
                     </div>
-                    <div class="row" style="margin-top: 1rem;">
+                    <div class="row" style="margin-top: 1rem;" <?php echo $hidden ?>>
                         <div class="col">
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end table-actions">
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#impRepair" type="button" style="color: white!important;"><i class="fa-solid fa-compass-drafting" style="color: #f3f3f3!important;"></i> &nbsp;Improvement & Repairs</button>
@@ -380,7 +381,7 @@ if (isset($_GET['asset'])) {
                     </div>
                     <div class="col">
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="IRC" id="flexRadioDefault1">
+                            <input class="form-check-input" type="radio" name="IRC" id="flexRadioDefault1" value="Improvement" checked>
                             <label class="form-check-label" for="flexRadioDefault1">
                                 Improvement Cost
                             </label>
@@ -388,7 +389,7 @@ if (isset($_GET['asset'])) {
                     </div>
                     <div class="col">
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="IRC" id="flexRadioDefault1">
+                            <input class="form-check-input" type="radio" name="IRC" id="flexRadioDefault1" value="Repair">
                             <label class="form-check-label" for="flexRadioDefault1">
                                 Repair Cost
                             </label>
@@ -399,8 +400,7 @@ if (isset($_GET['asset'])) {
                     <div class="col">
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing-sm">Amount :</span>
-                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-
+                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="txtCost[add_cost]" id="add_cost">
                         </div>
                     </div>
                 </div>
@@ -408,16 +408,34 @@ if (isset($_GET['asset'])) {
                     <div class="col">
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing-sm">Added Useful Life :</span>
-                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-
+                            <input type="number" class="form-control" aria-label="Sizing example input" id="add_cost_usefullife" aria-describedby="inputGroup-sizing-sm" name="txtCost[usefullife]">
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <form id="added-cost-form">
+                            <table id="added-cost-table" style="font-size: 10px!important">
+                                <thead style="background: #f3f3f3;">
+                                    <tr>
+                                        <th style="font-size: 10px!important">ID</th>
+                                        <th style="font-size: 10px!important">Type</th>
+                                        <th style="font-size: 10px!important">Cost</th>
+                                        <th style="font-size: 10px!important">Usefullife</th>
+                                        <th style="font-size: 10px!important">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </form>
                     </div>
 
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-primary" onclick="saveAddedCost()">Save</button>
             </div>
         </div>
     </div>
@@ -515,6 +533,32 @@ require('../static_components/footer.php');
             "error": (data) => {
                 $('.assign-emp tbody').empty()
                 $('.assign-emp tbody').append("<tr><td colspan='4' style='text-align:center'>No Data Available</td></tr>")
+            }
+        }
+    })
+    let addedCost = $('#added-cost-table').DataTable({
+        searching: false,
+        "ajax": {
+            "url": "../clsController/asset.php",
+            "type": "POST",
+            "data": {
+                "action": "getaddedcost",
+                "assetno": `${$('#assetno').val()}`
+            },
+            "error": (error) => {
+                console.log(error)
+            },
+            "success": (data) => {
+                addedCost.clear()
+                data.forEach((item) => {
+                    addedCost.row.add([
+                        `${item['master_id']}`,
+                        `${item['type']}`,
+                        `${item['add_cost']}`,
+                        `${item['usefullife']}`,
+                        `<input type="button" class="btn btn-danger" value="Delete Cost" onclick="deleteCost(${item['master_id']})"/>`,
+                    ]).draw(false)
+                })
             }
         }
     })
@@ -819,9 +863,40 @@ require('../static_components/footer.php');
             alertify.error("Asset Code is Empty")
         }
     }
-    // getData("department", "dept")
-    // getData("status", "status")
-    // // getData("category", "cat")
-    // getData("location", "location")
-    // getData("employee","assignemp")
+
+    function saveAddedCost() {
+        if ($('#add_cost').val() == '') {
+            alertify.error("Amount Empty")
+        } else if ($('#add_cost_usefullife').val() == '') {
+            alertify.error("Useful life Empty")
+        } else {
+            $.ajax({
+                url: "../clsController/asset.php",
+                type: 'POST',
+                contentType: "application/x-www-form-urlencoded",
+                data: `data[assetno]=${$('#assetno').val()}&data[type]=${$('input[name="IRC"]:checked').val()}&data[usefullife]=${$('#add_cost_usefullife').val()}&data[add_cost]=${$('#add_cost').val()}&action=saveAddedCost`,
+                error: (error) => {
+                    console.log(error)
+                },
+                success: (data) => {
+                    $('#added-cost-table').DataTable().ajax.reload()
+                }
+            })
+        }
+    }
+
+    function deleteCost(id) {
+        $.ajax({
+            url: "../clsController/asset.php",
+            type: "POST",
+            contentType: "application/x-www-form-urlencoded",
+            data: `id=${id}&action=deleteCost`,
+            error: (error) => {
+                console.log(error)
+            },
+            success: (data) => {
+                $('#added-cost-table').DataTable().ajax.reload()
+            }
+        })
+    }
 </script>
