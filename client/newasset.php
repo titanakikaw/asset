@@ -33,6 +33,9 @@ if (isset($_GET['asset'])) {
         }
         $hidden = '';
     }
+    $page_type = "Update Asset";
+} else {
+    $page_type = "Save Asset";
 }
 
 ?>
@@ -165,7 +168,7 @@ if (isset($_GET['asset'])) {
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Asset Code :</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[assetno]" id="assetno" value="<?php echo $GlobalData['assetno'] ? $GlobalData['assetno'] : '' ?>">
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[assetno]" id="assetno" value="<?php echo $GlobalData['assetno'] ? $GlobalData['assetno'] : '' ?>" <?php echo $GlobalData['assetno'] ? 'disabled' : '' ?>>
                             </div>
                         </div>
 
@@ -285,7 +288,7 @@ if (isset($_GET['asset'])) {
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Annual Depreciation :</span>
-                                <input type="text" disabled class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="txtannualdepreciation" name="data[annualdep]" value="<?php echo $GlobalData['annualdep'] ? $GlobalData['annualdep'] : '0' ?>">
+                                <input type="text" disabled class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="txtannualdepreciation" name="data[annualdep]" value="<?php echo $GlobalData['annualdep'] ? "PHP " . $GlobalData['annualdep'] : '0' ?>" onchange="moneyFormat(this, 'currency')">
                             </div>
                         </div>
                     </div>
@@ -353,7 +356,7 @@ if (isset($_GET['asset'])) {
                     <div class="row" style="margin-top: 10px;">
                         <div class="col">
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end table-actions">
-                                <button class="btn btn-success" type="button" onclick="save()"><i class="fa-solid fa-check" style="color: white!important;"></i> &nbsp; Save Asset</button>
+                                <button class="btn btn-success" type="button" onclick="save(this)"><i class="fa-solid fa-check" style="color: white!important;"></i> &nbsp; <?php echo $page_type ?></button>
                                 <a href="assets.php" class="btn btn-danger" type="button"><i class="fa-solid fa-ban" style="color: white!important;"></i> &nbsp; Cancel Asset</a>
                             </div>
                         </div>
@@ -443,8 +446,8 @@ if (isset($_GET['asset'])) {
 
 
 <!-- Assign Employee -->
-<div class="modal fade" id="AssignEmp" tabindex="-1" aria-labelledby="impRepairLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+<div class="modal fade" id="AssignEmp" aria-labelledby="impRepairLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modelassign">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Asset Employee Assignment</h5>
@@ -510,13 +513,14 @@ require('../static_components/footer.php');
             },
             "success": (data) => {
                 let assignStatus = false;
+                assigntable.clear()
                 data.forEach((data) => {
                     let inputBtn = '';
                     if (data['status'] == "Assigned") {
                         assignStatus = true
-                        inputBtn = `<input type="button" class="btn btn-primary" style="font-size: 11px;border-radius:3px;" value="Unassign">`
+                        inputBtn = `<input type="button" class="btn btn-primary" style="font-size: 11px;border-radius:3px;" value="Unassign" onclick="UnassignEmployee(${data['master_id']})">`
                     } else if (data['status'] == "Unassigned") {
-                        inputBtn = `<input type="button" class="btn btn-primary" style="font-size: 11px;border-radius:3px;" value="Re-Assign">`
+                        inputBtn = `<input type="button" class="btn btn-primary" style="font-size: 11px;border-radius:3px;" value="Re-Assign" onclick="ReassignEmployee(${data['master_id']})">`
                     }
                     assigntable.row.add([
                         `${data['lname']}, ${data['fname']} ${data['mi']}`,
@@ -565,7 +569,9 @@ require('../static_components/footer.php');
 
 
     $(document).ready(() => {
-        $('#selectassignemp').select2()
+        $('#selectassignemp').select2({
+            dropdownParent: $('.modelassign')
+        })
         $('#location').select2()
         $('#dept').select2()
         $('#status').select2()
@@ -720,38 +726,56 @@ require('../static_components/footer.php');
         })
     }
 
-    function save() {
+    function save(element) {
         if (checkforminput()) {
-            $.ajax({
-                url: "../clsController/asset.php",
-                type: "POST",
-                contentType: 'application/x-www-form-urlencoded',
-                data: $('#form-asset').serialize() + `&data[annualdep]=${$('#txtannualdepreciation').val() ? $('#txtannualdepreciation').val() : 0}` + `&data[monthlydep]=${$('#txtdepreciation').val()}&` + `data[totalcost]=${$('#txttotalcost').val()}` + getFiles() + '&action=new',
-                error: (error) => {
-                    console.log(error)
-                },
-                success: (data) => {
-                    if (data) {
-                        getEmployee();
-                        saveImages();
-                        alertify.success("Asset Saved")
-                        alertify.confirm('Asset Notification', 'Would you like to assign this asset to an employee ?',
-                            function() {
-                                $('#assginBtn').click()
 
-                            },
-                            function() {
-                                alertify.error('Cancel')
-                                window.location.replace("assets.php");
-                            }
-                        );
-                        // clearInputs()
-                    } else {
-                        alertify.warning("Error in saving, Please check all valid fields.")
+            if (element.innerText.trim() == "Save Asset") {
+                $.ajax({
+                    url: "../clsController/asset.php",
+                    type: "POST",
+                    contentType: 'application/x-www-form-urlencoded',
+                    data: $('#form-asset').serialize() + `&data[annualdep]=${$('#txtannualdepreciation').val() ? $('#txtannualdepreciation').val() : 0}` + `&data[monthlydep]=${$('#txtdepreciation').val()}&` + `data[totalcost]=${$('#txttotalcost').val()}` + getFiles() + '&action=new',
+                    error: (error) => {
+                        console.log(error)
+                    },
+                    success: (data) => {
+                        if (data) {
+                            getEmployee();
+                            saveImages();
+                            alertify.success("Asset Saved")
+                            alertify.confirm('Asset Notification', 'Would you like to assign this asset to an employee ?',
+                                function() {
+                                    $('#assginBtn').click()
+
+                                },
+                                function() {
+                                    alertify.error('Cancel')
+                                    window.location.replace("assets.php");
+                                }
+                            );
+
+                        } else {
+                            alertify.warning("Error in saving, Please check all valid fields.")
+                        }
                     }
+                })
+            } else {
+                $.ajax({
+                    url: "../clsController/asset.php",
+                    type: "POST",
+                    contentType: 'application/x-www-form-urlencoded',
+                    data: $('#form-asset').serialize() + `&data[annualdep]=${$('#txtannualdepreciation').val() ? $('#txtannualdepreciation').val() : 0}` + `&data[monthlydep]=${$('#txtdepreciation').val()}&` + `data[totalcost]=${$('#txttotalcost').val()}` + `&data[assetno]=${$('#assetno').val()}` + getFiles() + '&action=update',
+                    error: (error) => {
+                        console.log(error)
+                    },
+                    success: (data) => {
+                        if (data) {
+                            alertify.success("Asset Updated")
+                        }
+                    }
+                })
+            }
 
-                }
-            })
         }
 
     }
@@ -896,6 +920,25 @@ require('../static_components/footer.php');
             },
             success: (data) => {
                 $('#added-cost-table').DataTable().ajax.reload()
+            }
+        })
+    }
+
+    function UnassignEmployee(id) {
+        $.ajax({
+            url: "../clsController/asset.php",
+            type: "POST",
+            contentType: "application/x-www-form-urlencoded",
+            data: `data[id]=${id}&action=unAssignEmployee`,
+            error: (error) => {
+                console.log(error)
+            },
+            success: (data) => {
+                console.log(data)
+                if (data) {
+                    alertify.success("Assignment of asset updated.")
+                    $('.assign-emp').DataTable().ajax.reload()
+                }
             }
         })
     }

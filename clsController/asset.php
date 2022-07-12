@@ -44,8 +44,23 @@ switch ($_POST['action']) {
         }
         break;
     case 'update':
-        break;
+        $col = $_POST['data'];
+        $files = $_POST['file'];
+        $col['cost'] = str_replace(" ", "", str_replace("PHP", "", $col['cost']));
+        $col['totalcost'] = str_replace(" ", "", str_replace("PHP", "", $col['totalcost']));
+        $col['salvalue'] = str_replace(" ", "", str_replace("PHP", "", $col['salvalue']));
 
+        $totalcost =  $col['totalcost'] * $col['qty'];
+        $deprecialbleCost =  $totalcost -  $col['salvalue'];
+        $col['monthlydep'] =  $deprecialbleCost / $col['usefullife'];
+        if ($col['usefullife'] < 12) {
+            $col['annualdep'] = 0;
+        } else {
+            $col['annualdep'] = $col['monthlydep'] * 12;
+        }
+        $clsController = new clsController($col, 'assets');
+        echo json_encode($clsController->update($_POST['data']['assetno'], 'assetno'));
+        break;
     case 'view':
         break;
 
@@ -80,7 +95,7 @@ switch ($_POST['action']) {
         echo json_encode($clsController->add());
         break;
     case 'getAssignedEmployee':
-        $query = "SELECT a.date,a.status,b.lname,b.fname,b.mi from emp_asset_assigned as a  INNER JOIN employee as b on a.empno = b.empno where a.assetno = ?";
+        $query = "SELECT a.master_id,a.date,a.status,b.lname,b.fname,b.mi from emp_asset_assigned as a  INNER JOIN employee as b on a.empno = b.empno where a.assetno = ? ";
         $clsController = new clsController('', '');
         echo json_encode($clsController->list_custom($query, [$_POST['assetno']]));
         break;
@@ -112,5 +127,11 @@ switch ($_POST['action']) {
         $xdata['master_id'] = $_POST['id'];
         $clsController = new clsController($xdata, 'asset_additional_cost');
         echo json_encode($clsController->delete());
+        break;
+    case 'unAssignEmployee':
+        // var_dump($_POST);
+        $xdata['status'] = "Unassigned";
+        $clsController = new clsController($xdata, 'emp_asset_assigned');
+        echo json_encode($clsController->update($_POST['data']['id'], 'master_id'));
         break;
 }

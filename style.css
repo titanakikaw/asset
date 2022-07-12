@@ -85,7 +85,7 @@ button, a {
 }
 
 .select2-dropdown {
-  z-index: 999;
+  z-index: 100;
 }
 
 span.select2-container {
