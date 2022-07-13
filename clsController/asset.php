@@ -1,10 +1,12 @@
 <?php
-require('../model/clsStandard.php');
-require('../model/clsConnection.php');
+// require('../model/clsStandard.php');
+require('../static_components/AUTO_GEN.php');
+// require('../model/clsConnection.php');
 date_default_timezone_set("Asia/Manila");
+// var_dump($settings);
+// die();
 switch ($_POST['action']) {
     case 'new':
-
         $col = $_POST['data'];
         $files = $_POST['file'];
         $col['cost'] = str_replace(" ", "", str_replace("PHP", "", $col['cost']));
@@ -26,6 +28,10 @@ switch ($_POST['action']) {
             }
         }
 
+
+        var_dump($_POST);
+        die();
+
         foreach ($files as $key => $value) {
             $assetFile['assetno'] = $col['assetno'];
             $assetFile['directory'] = '../assetImages';
@@ -33,6 +39,8 @@ switch ($_POST['action']) {
             $clsController = new clsController($assetFile, 'asset_files');
             echo json_encode($clsController->add());
         }
+
+
         $clsController = new clsController($col, 'assets');
         echo json_encode($clsController->add());
         break;
@@ -141,5 +149,10 @@ switch ($_POST['action']) {
         $xdata['status'] = "Unassigned";
         $clsController = new clsController($xdata, 'emp_asset_assigned');
         echo json_encode($clsController->update($_POST['data']['id'], 'master_id'));
+        break;
+    case 'deleteImages':
+        $xdata['master_id'] = $_POST['data']['id'];
+        $clsController = new clsController($xdata, 'asset_files');
+        echo json_encode($clsController->delete());
         break;
 }

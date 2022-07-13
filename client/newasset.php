@@ -1,6 +1,5 @@
 <?php
 require('../static_components/header.php');
-require('../model/clsConnection.php');
 $GlobalData['loc_code'] = '';
 $GlobalData['dept_code'] = '';
 $GlobalData['status_code'] = '';
@@ -16,6 +15,7 @@ $GlobalData['qty'] = '';
 $GlobalData['annualdep'] = '';
 $GlobalData['monthlydep'] = '';
 $GlobalData['salvalue'] = '';
+$GlobalData['salpercent'] = '';
 $GlobalData['usefullife'] = '';
 $hidden = 'hidden';
 if (isset($_GET['asset'])) {
@@ -36,6 +36,12 @@ if (isset($_GET['asset'])) {
     $page_type = "Update Asset";
 } else {
     $page_type = "Save Asset";
+    if ($settings['asset_auto'] == 1) {
+        $hide_asset_no = '';
+        $GlobalData['assetno'] = 'AUTO';
+    } else {
+        $hide_asset_no = '';
+    }
 }
 
 ?>
@@ -164,14 +170,14 @@ if (isset($_GET['asset'])) {
                     <div class="row">
 
                     </div>
-                    <div class="row">
+
+                    <div class="row" <?php echo $hide_asset_no ?>>
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Asset Code :</span>
                                 <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[assetno]" id="assetno" value="<?php echo $GlobalData['assetno'] ? $GlobalData['assetno'] : '' ?>" <?php echo $GlobalData['assetno'] ? 'disabled' : '' ?>>
                             </div>
                         </div>
-
                     </div>
                     <div class="row">
                         <div class="col">
@@ -335,9 +341,9 @@ if (isset($_GET['asset'])) {
                                             echo "<div class='card'>
                                                     <img src=" . $value['filename'] . " alt='img' style='height:100px'>
                                                     <div class='card-body'>
-                                                        <button  class='btn btn-danger'><i class='fa-solid fa-trash'></i>&nbsp;Remove</button>                                       
+                                                        <button  type='button' class='btn btn-danger' onclick='deletePhoto(" . $value['master_id'] . ")'><i class='fa-solid fa-trash'></i>&nbsp;Remove</button>                                       
                                                     </div>
-                                                    </div>";
+                                                </div>";
                                         }
                                     } catch (\Throwable $th) {
                                         var_dump($th);
@@ -572,7 +578,6 @@ require('../static_components/footer.php');
         }
     })
 
-
     $(document).ready(() => {
         $('#selectassignemp').select2({
             dropdownParent: $('.modelassign')
@@ -748,16 +753,15 @@ require('../static_components/footer.php');
                             getEmployee();
                             saveImages();
                             alertify.success("Asset Saved")
-                            alertify.confirm('Asset Notification', 'Would you like to assign this asset to an employee ?',
-                                function() {
-                                    $('#assginBtn').click()
-
-                                },
-                                function() {
-                                    alertify.error('Cancel')
-                                    window.location.replace("assets.php");
-                                }
-                            );
+                            window.location.replace("assets.php");
+                            // alertify.confirm('Asset Notification', 'Would you like to do a another entry?',
+                            //     function() {
+                            //         clearInputs()
+                            //     },
+                            //     function() {
+                            //         window.location.replace("assets.php");
+                            //     }
+                            // );
 
                         } else {
                             alertify.warning("Error in saving, Please check all valid fields.")
@@ -777,6 +781,7 @@ require('../static_components/footer.php');
                         if (data) {
                             saveImages()
                             alertify.success("Asset Updated")
+                            location.reload()
                         }
                     }
                 })
@@ -950,5 +955,26 @@ require('../static_components/footer.php');
                 }
             }
         })
+    }
+
+    function deletePhoto(id) {
+        $.ajax({
+            url: "../clsController/asset.php",
+            type: "POST",
+            contentType: "application/x-www-form-urlencoded",
+            data: `data[assetno]=${$('#assetno').val()}&data[id]=${id}&action=deleteImages`,
+            error: (error) => {
+                console.log(error)
+            },
+            success: (data) => {
+                if (data) {
+                    location.reload()
+                }
+            }
+        })
+    }
+
+    function autoGenerate() {
+
     }
 </script>

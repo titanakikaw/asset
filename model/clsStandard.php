@@ -97,27 +97,28 @@ class clsController
             return false;
             die();
         }
-    }   
+    }
 
-    function get2($table, $columns){
+    function get2($table, $columns)
+    {
         $condition = '';
         $data = [];
-        
+
         foreach ($columns as $key => $value) {
-            if($condition != ''){
+            if ($condition != '') {
                 $condition .= " AND ";
             }
             array_push($data, $value);
-            $condition .= "$key = ?";   
+            $condition .= "$key = ?";
         }
         try {
             $clsConnection = new dbConnection();
             $conn = $clsConnection->conn();
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $query = "SELECT * from `$table` where $condition";
-            
+
             $stmt = $conn->prepare($query);
-            $stmt->execute( $data);
+            $stmt->execute($data);
             $dbData = $stmt->fetchAll();
             return $dbData;
         } catch (\Throwable $th) {
@@ -229,7 +230,8 @@ class clsController
         }
     }
 
-    function list_custom($controllerquery, $data){
+    function list_custom($controllerquery, $data)
+    {
         try {
             $clsConnection = new dbConnection();
             $conn = $clsConnection->conn();
@@ -244,7 +246,8 @@ class clsController
             return false;
         }
     }
-    function fullcustom($query){
+    function fullcustom($query)
+    {
         $clsConnection = new dbConnection();
         $conn = $clsConnection->conn();
         $query = $query;
@@ -252,5 +255,5 @@ class clsController
         $stmt->execute();
         $data = $stmt->fetchAll();
         return $data;
-    }   
+    }
 }

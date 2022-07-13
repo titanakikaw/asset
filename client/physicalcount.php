@@ -1,6 +1,6 @@
 <?php
 require('../static_components/header.php');
-require('../model/clsConnection.php');
+// require('../model/clsConnection.php');
 ?>
 <div class="container" style="margin-top:1rem; padding: 5px;">
     <div class="row">
