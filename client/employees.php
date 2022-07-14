@@ -1,5 +1,12 @@
 <?php
 require('../static_components/header.php');
+if ($settings['emp_auto'] == 1) {
+    $emp_auto = "AUTO GENERATED";
+    $disabled = 'disabled';
+} else {
+    $emp_auto = '';
+    $disabled = '';
+}
 ?>
 <div class="container" style="margin-top:1rem; padding: 5px;">
     <div class="row">
@@ -54,7 +61,7 @@ require('../static_components/header.php');
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Employee No :</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[empno]">
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[empno]" <?php echo $disabled ?> value="<?php echo $emp_auto ?>">
                             </div>
                         </div>
                         <div class="col">

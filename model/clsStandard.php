@@ -31,7 +31,7 @@ class clsController
             $clsConnection = new dbConnection();
             $conn = $clsConnection->conn();
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $query = "SELECT * from `$this->table` where $this->columns=?";
+            $query = "SELECT * from `$this->table` where $this->columns =? ";
             $stmt = $conn->prepare($query);
             $stmt->execute($this->data);
             $dbData = $stmt->fetch();
@@ -39,7 +39,7 @@ class clsController
                 return true;
             }
         } catch (\Throwable $th) {
-            var_dump($th);
+            var_dump('error' . $th);
             return false;
         }
     }
@@ -254,6 +254,16 @@ class clsController
         $stmt = $conn->prepare($query);
         $stmt->execute();
         $data = $stmt->fetchAll();
+        return $data;
+    }
+    function getTop()
+    {
+        $clsConnection = new dbConnection();
+        $conn = $clsConnection->conn();
+        $query = "SELECT master_id from $this->table order by master_id desc limit 1";
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
+        $data = $stmt->fetch();
         return $data;
     }
 }

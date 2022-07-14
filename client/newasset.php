@@ -37,10 +37,7 @@ if (isset($_GET['asset'])) {
 } else {
     $page_type = "Save Asset";
     if ($settings['asset_auto'] == 1) {
-        $hide_asset_no = '';
-        $GlobalData['assetno'] = 'AUTO';
-    } else {
-        $hide_asset_no = '';
+        $GlobalData['assetno'] = 'Auto Generated';
     }
 }
 
@@ -171,7 +168,7 @@ if (isset($_GET['asset'])) {
 
                     </div>
 
-                    <div class="row" <?php echo $hide_asset_no ?>>
+                    <div class="row">
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Asset Code :</span>
@@ -753,15 +750,15 @@ require('../static_components/footer.php');
                             getEmployee();
                             saveImages();
                             alertify.success("Asset Saved")
-                            window.location.replace("assets.php");
-                            // alertify.confirm('Asset Notification', 'Would you like to do a another entry?',
-                            //     function() {
-                            //         clearInputs()
-                            //     },
-                            //     function() {
-                            //         window.location.replace("assets.php");
-                            //     }
-                            // );
+                            // window.location.replace("assets.php");
+                            alertify.confirm('Asset Notification', 'Would you like to do a another entry?',
+                                function() {
+                                    clearInputs()
+                                },
+                                function() {
+                                    window.location.replace("assets.php");
+                                }
+                            );
 
                         } else {
                             alertify.warning("Error in saving, Please check all valid fields.")
@@ -843,7 +840,9 @@ require('../static_components/footer.php');
         let passed = true;
         formInputs.map((index, element) => {
             if (element.type == "text") {
-                element.value = ""
+                if (element.value != 'Auto Generated') {
+                    element.value = ""
+                }
             }
         })
     }

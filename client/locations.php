@@ -1,5 +1,13 @@
 <?php
+
 require('../static_components/header.php');
+if ($settings['loc_auto'] == 1) {
+    $loc_auto = "AUTO GENERATED";
+    $disabled = 'disabled';
+} else {
+    $loc_auto = '';
+    $disabled = '';
+}
 ?>
 <div class="container" style="margin-top:1rem; padding: 5px;">
     <div class="row">
@@ -44,7 +52,7 @@ require('../static_components/header.php');
                     <div class="row">
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing-sm">Location Code :</span>
-                            <input type="text" class="form-control" aria-label="Sizing example input" id="loc_code" name="data[loc_code]" aria-describedby="inputGroup-sizing-sm">
+                            <input type="text" class="form-control" aria-label="Sizing example input" id="loc_code" name="data[loc_code]" aria-describedby="inputGroup-sizing-sm" value="<?php echo $loc_auto; ?>" <?php echo $disabled ?>>
                         </div>
                     </div>
                     <div class="row">
@@ -72,7 +80,7 @@ require('../static_components/footer.php');
     $(document).ready(() => {
         $('#btnNew').click(() => {
             $('#btnSave')[0].innerText = "Save";
-            enableInputs($('#formLocation input'))
+            // enableInputs($('#formLocation input'))
         })
     })
 

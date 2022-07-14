@@ -3,8 +3,7 @@
 require('../static_components/AUTO_GEN.php');
 // require('../model/clsConnection.php');
 date_default_timezone_set("Asia/Manila");
-// var_dump($settings);
-// die();
+
 switch ($_POST['action']) {
     case 'new':
         $col = $_POST['data'];
@@ -21,17 +20,23 @@ switch ($_POST['action']) {
         } else {
             $col['annualdep'] = $col['monthlydep'] * 12;
         }
-        foreach ($col as $key => $value) {
-            if ($value == '') {
-                echo json_encode(false);
-                break;
+
+        if ($settings['asset_auto'] == 1) {
+            $clsController = new clsController('', 'assets');
+            $master = $clsController->getTop();
+            $newCode = $col['loc_code'][0] . $col['dept_code'][0] . $col['dtefrom'][1] . "-" . $col['status_code'][0] . $col['cat_code'][0] . $col['cat_code'][0] . '-' . $master['master_id'];
+            $passed = false;
+            while ($passed) {
+                $clsController = new clsController(['assetno' => $newCode], 'assets');
+                if ($clsController->check() != null) {
+                    $master['master_id'] += 1;
+                    $newCode = $col['loc_code'][0] . $col['dept_code'][0] . $col['dtefrom'][1] . "-" . $col['status_code'][0] . $col['cat_code'][0] . $col['cat_code'][0] . '-' . $master['master_id'];
+                } else {
+                    $passed = true;
+                }
             }
+            $col['assetno'] = $newCode;
         }
-
-
-        var_dump($_POST);
-        die();
-
         foreach ($files as $key => $value) {
             $assetFile['assetno'] = $col['assetno'];
             $assetFile['directory'] = '../assetImages';
@@ -39,7 +44,6 @@ switch ($_POST['action']) {
             $clsController = new clsController($assetFile, 'asset_files');
             echo json_encode($clsController->add());
         }
-
 
         $clsController = new clsController($col, 'assets');
         echo json_encode($clsController->add());

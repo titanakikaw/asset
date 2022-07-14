@@ -1,12 +1,29 @@
 <?php
-require('../model/clsStandard.php');
-require('../model/clsConnection.php');
+// require('../model/clsStandard.php');
+// require('../model/clsConnection.php');
+require('../static_components/AUTO_GEN.php');
 date_default_timezone_set("Asia/Manila");
 
 
 switch ($_POST['action']) {
     case 'new':
         $col = $_POST['data'];
+        if ($settings['phc_auto'] == '1') {
+            $clsController = new clsController('', 'asset_physical_count');
+            $master = $clsController->getTop();
+            $newCode = "PHC-" . strtoupper($col['loc_code'][0]) . strtoupper($col['dept_code'][0]) . strtoupper($col['countedBy'][0]) . "-" . $master['master_id'];
+            $passed = false;
+            while ($passed) {
+                $clsController = new clsController(['phc_code' => $newCode], 'employee');
+                if ($clsController->check() != null) {
+                    $master['master_id'] += 1;
+                    $newCode = "PHC-" . strtoupper($col['loc_code'][0]) . strtoupper($col['dept_code'][0]) . strtoupper($col['countedBy'][0]) . "-" . $master['master_id'];
+                } else {
+                    $passed = true;
+                }
+            }
+            $col['phc_code'] = $newCode;
+        }
         $col['date'] = date("m-d-Y h:i:s");;
         $clsController = new clsController($col, 'asset_physical_count');
         echo json_encode($clsController->add());

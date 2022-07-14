@@ -1,7 +1,27 @@
 <?php
 require('../static_components/header.php');
 // require('../model/clsConnection.php');
+if ($settings['phc_auto'] == 1) {
+    $phc_auto = "AUTO GENERATED";
+    $disabled = 'disabled';
+} else {
+    $phc_auto = '';
+    $disabled = '';
+}
 ?>
+<style>
+    .select2-dropdown {
+        z-index: 9999999;
+    }
+
+    span.select2-container {
+        z-index: 9999999;
+    }
+
+    .reports li {
+        margin: 10px 0;
+    }
+</style>
 <div class="container" style="margin-top:1rem; padding: 5px;">
     <div class="row">
         <div class="col">
@@ -127,7 +147,7 @@ require('../static_components/header.php');
                     <div class="row">
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing-sm">PHC Code :</span>
-                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[phc_code]">
+                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[phc_code]" <?php echo $disabled ?> value="<?php echo $phc_auto ?>">
                         </div>
                     </div>
                     <div class="row">
@@ -269,7 +289,7 @@ require('../static_components/header.php');
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary btnclosemodal" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" onclick="save()">Close</button>
 
                     <a href="newphc.php" type="button" class="btn btn-primary" style="display: hidden;">Save</a>
@@ -284,16 +304,16 @@ require('../static_components/footer.php');
 <script>
     $(document).ready(() => {
         $('#emp_counted').select2({
-            dropdownParent: $('.modal-dialog')[0]
+
         })
         $('#emp_reviewed').select2({
-            dropdownParent: $('.modal-dialog')[0]
+
         })
         $('#loc_new').select2({
-            dropdownParent: $('.modal-dialog')[0]
+
         })
         $('#dept').select2({
-            dropdownParent: $('.modal-dialog')[0]
+
         })
     })
 
@@ -344,7 +364,9 @@ require('../static_components/footer.php');
             success: (data) => {
                 $('.asset-table').DataTable().ajax.reload();
                 if (data) {
-                    window.location.href = "newphc.php"
+                    $('#btnclosemodal').click();
+                    $('.phc-table').DataTable().ajax.reload();
+                    // window.location.href = "newphc.php"
                 }
             }
         })

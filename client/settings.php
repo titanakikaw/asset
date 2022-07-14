@@ -32,6 +32,9 @@ if ($settings['emp_auto'] != 0) {
 } else {
     $emp_auto = '';
 }
+if ($settings['stat_auto'] != 0) {
+    $stat_auto = 'checked';
+}
 
 
 
@@ -62,6 +65,9 @@ if ($settings['emp_auto'] != 0) {
                 </li>
                 <li style="display: flex; align-items:center; justify-content:space-between">
                     <p style="margin: 0; padding:0;">Employee No. :</p><input type="checkbox" name="data[emp_auto]" <?php echo $emp_auto ?>>
+                </li>
+                <li style="display: flex; align-items:center; justify-content:space-between">
+                    <p style="margin: 0; padding:0;">Status Code :</p><input type="checkbox" name="data[stat_auto]" <?php echo $stat_auto ?>>
                 </li>
             </ul>
             <input type="button" class="btn btn-primary" value="Save" onclick="updateSettings()" style="width: 100%;border-radius:2px;font-size:11px">

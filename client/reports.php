@@ -1,6 +1,6 @@
 <?php
 require('../static_components/header.php');
-require('../model/clsConnection.php');
+// require('../model/clsConnection.php');
 ?>
 
 <div class="reports container" style="margin-top:1rem; padding: 5px;">
@@ -34,7 +34,7 @@ require('../model/clsConnection.php');
         <form id="assetReport">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Asset Report</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Asset Report FILTER</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">

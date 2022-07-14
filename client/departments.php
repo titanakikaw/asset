@@ -1,5 +1,14 @@
 <?php
 require('../static_components/header.php');
+if ($settings['dept_auto'] == 1) {
+    $dept_auto = "AUTO GENERATED";
+    $disabled = 'disabled';
+} else {
+    $dept_auto = '';
+    $disabled = '';
+}
+
+
 ?>
 <div class="container" style="margin-top:1rem; padding: 5px;">
     <div class="row">
@@ -47,7 +56,7 @@ require('../static_components/header.php');
                     <div class="row">
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing-sm">Department Code :</span>
-                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[dept_code]">
+                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="data[dept_code]" value="<?php echo $dept_auto ?>" <?php echo $disabled ?>>
                         </div>
                     </div>
                     <div class="row">
@@ -65,7 +74,6 @@ require('../static_components/header.php');
         </form>
     </div>
 </div>
-
 
 
 
