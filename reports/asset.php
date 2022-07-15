@@ -35,7 +35,7 @@ class MYPDF extends TCPDF
                         <td colspan=""><h1>' . $this->company . '</h1></td>
                     </tr>
                     <tr>
-                        <td colspan=""><h3>SAMPLE REPORT</h3></td>
+                        <td colspan=""><h3>FIXED ASSET REPORT</h3></td>
                     </tr>
                     <tr>
                         <td style="font-size:9px;width:100px;">Category [ FROM ] :</td>
@@ -73,9 +73,9 @@ class MYPDF extends TCPDF
                     <tr>
                         <td style="font-size:9px;width:70px;border-bottom:1px solid black">Asset Code</td>
                         <td style="font-size:9px;width:70px;border-bottom:1px solid black">Description</td>
-                        <td style="font-size:9px;width:70px;border-bottom:1px solid black">Category</td>
-                        <td style="font-size:9px;width:70px;border-bottom:1px solid black">Department</td>
-                        <td style="font-size:9px;width:70px;border-bottom:1px solid black">Location</td>
+                        <td style="font-size:9px;width:60px;border-bottom:1px solid black">Category</td>
+                        <td style="font-size:9px;width:60px;border-bottom:1px solid black">Department</td>
+                        <td style="font-size:9px;width:60px;border-bottom:1px solid black">Location</td>
                         <td style="font-size:9px;width:70px;border-bottom:1px solid black">Start Warranty</td>
                         <td style="font-size:9px;width:70px;border-bottom:1px solid black">End Warranty</td>
                         <td style="font-size:9px;width:70px;border-bottom:1px solid black">Status</td>
@@ -83,8 +83,8 @@ class MYPDF extends TCPDF
                         <td style="font-size:9px;width:70px;border-bottom:1px solid black">Cost</td>
                         <td style="font-size:9px; width: 40px;border-bottom:1px solid black">Qty</td>
                         <td style="font-size:9px;border-bottom:1px solid black">Salvage Value</td>
-                        <td style="font-size:9px; width: 60px;border-bottom:1px solid black">Monthly Dep.</td>
-                        <td style="font-size:9px; width: 60px;border-bottom:1px solid black">Annual Dep.</td>
+                        <td style="font-size:9px; width: 70px;border-bottom:1px solid black">Monthly Dep.</td>
+                        <td style="font-size:9px; width: 70px;border-bottom:1px solid black">Annual Dep.</td>
                         <td style="font-size:9px;border-bottom:1px solid black">Assigned</td>
                     </tr>
                 </table>';
@@ -94,31 +94,31 @@ class MYPDF extends TCPDF
 $xdata = $_GET['data'];
 $condition = "";
 if ($xdata['dteFrom'] != '') {
-    $condition .= "dtefrom = '" . $xdata['dteFrom'] . "'";
+    $condition .= "a.dtefrom = '" . $xdata['dteFrom'] . "'";
     $condition .= " AND ";
 }
 if ($xdata['dteTo'] != '') {
-    $condition .= "dteto = '" . $xdata['dteTo'] . "'";
+    $condition .= "a.dteto = '" . $xdata['dteTo'] . "'";
     $condition .= " AND ";
 }
 
 if ($xdata["cat_code_from"] != '' || $xdata['cat_code_to'] != '') {
     if ($xdata["cat_code_from"] != '') {
-        $condition .= "cat_code <= '" . $xdata["cat_code_from"] . "'";
+        $condition .= "a.cat_code <= '" . $xdata["cat_code_from"] . "'";
         $condition .= " AND ";
     }
     if ($xdata['cat_code_to'] != '') {
-        $condition .= "cat_code >= '" . $xdata["cat_code_from"] . "'";
+        $condition .= "a.cat_code >= '" . $xdata["cat_code_from"] . "'";
     }
 }
 if ($xdata["dept_code_from"] != '' || $xdata['dept_code_to'] != '') {
     $condition .= " AND ";
     if ($xdata["dept_code_from"] != '') {
-        $condition .= "dept_code <= '" . $xdata["dept_code_from"] . "'";
+        $condition .= "a.dept_code <= '" . $xdata["dept_code_from"] . "'";
         $condition .= " AND ";
     }
     if ($xdata['dept_code_to'] != '') {
-        $condition .= "dept_code >= '" . $xdata["dept_code_to"] . "'";
+        $condition .= "a.dept_code >= '" . $xdata["dept_code_to"] . "'";
     }
 }
 
@@ -128,11 +128,13 @@ if ($condition != '') {
 
 
 $assetData = array();
-$query = "SELECT a.* , b.description as status from assets as a INNER JOIN status as b on a.status_code = b.status_code  $condition";
+$query = "SELECT a.* , b.description as status, c.description as cat_code, d.description as dept_code from assets as a INNER JOIN status as b on a.status_code = b.status_code INNER JOIN category as c on a.cat_code = c.cat_code INNER JOIN department as d on a.dept_code = d.dept_code $condition";
+// var_dump($query);
+// die();
 $clsController = new clsController('', '');
 $assetData = $clsController->list_custom($query, []);
 foreach ($assetData as $key => $value) {
-    $query = "SELECT CONCAT(b.lname,', ', b.fname,' ', b.mi) as name from emp_asset_assigned as a inner join employee as b where assetno=?";
+    $query = "SELECT CONCAT(b.lname,', ', b.fname,' ', b.mi) as name from emp_asset_assigned as a inner join employee as b  on a.empno = b.empno where a.assetno=? AND a.status = 'Assigned'";
     $assignedData = $clsController->list_custom($query, [$value['assetno']]);
     if (count($assignedData) > 0) {
         $assetData[$key]['name'] = $assignedData[0]['name'];
@@ -147,33 +149,49 @@ $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 $pdf->setAutoPageBreak(true, 23);
 $pdf->SetMargins(5, 40, 5);
 $pdf->setPrintHeader(true);
-$pdf->SetFooterMargin(20);
+// $pdf->SetFooterMargin(20);
+// $pdf->getFontSize(5);
 $pdf->AddPage('L', 'LEGAL');
+
+$totalQty = 0;
+$totalCost = 0;
+$totalSalvageValue = 0;
+$totalMonthly = 0;
+$totalAnnual = 0;
 
 
 $html = '<table cellspacing="" cellpadding="2" >
             <tbody>';
 
 foreach ($assetData as $key => $value) {
+    $totalQty += $value['qty'];
+    $totalCost += $value['cost'];
+    $totalSalvageValue += $value['salvalue'];
+    $totalMonthly += $value['monthlydep'];
+    $totalAnnual += $value['annualdep'];
+
+
     $html .= '<tr>
-                    <td style="font-size:9px;width:70px">' . $value['assetno'] . '</td>
-                    <td style="font-size:9px;width:70px">' . $value['description'] . '</td>
-                    <td style="font-size:9px;width:70px">' . $value['cat_code'] . '</td>
-                    <td style="font-size:9px;width:70px">' . $value['dept_code'] . '</td>
-                    <td style="font-size:9px;width:70px">' . $value['loc_code'] . '</td>
-                    <td style="font-size:9px;width:70px">' . $value['dtefrom'] . '</td>
-                    <td style="font-size:9px;width:70px">' . $value['dteto'] . '</td>
-                    <td style="font-size:9px;width:70px">' . $value['status'] . '</td>
-                    <td style="font-size:9px;width:50px">' . $value['usefullife'] . '</td>
-                    <td style="font-size:9px;width:70px">' . $value['cost'] . '</td>
-                    <td style="font-size:9px;width:40px">' . $value['qty'] . '</td>
-                    <td style="font-size:9px;width:70px">' . $value['salvalue'] . '</td>
-                    <td style="font-size:9px;width: 60px;">PHP ' . $value['monthlydep'] . '</td>
-                    <td style="font-size:9px;width: 60px;">PHP ' . $value['annualdep'] . '</td>
-                    <td style="font-size:9px;">' . $value['name'] . '</td>
+                    <td style="font-size:8px;width:70px">' . $value['assetno'] . '</td>
+                    <td style="font-size:8px;width:70px">' . $value['description'] . '</td>
+                    <td style="font-size:8px;width:60px">' . $value['cat_code'] . '</td>
+                    <td style="font-size:8px;width:60px">' . $value['dept_code'] . '</td>
+                    <td style="font-size:8px;width:60px">' . $value['loc_code'] . '</td>
+                    <td style="font-size:8px;width:70px">' . $value['dtefrom'] . '</td>
+                    <td style="font-size:8px;width:70px">' . $value['dteto'] . '</td>
+                    <td style="font-size:8px;width:70px">' . $value['status'] . '</td>
+                    <td style="font-size:8px;width:50px">' . $value['usefullife'] . '</td>
+                    <td style="font-size:8px;width:70px">PHP ' . number_format($value['cost']) . '</td>
+                    <td style="font-size:8px;width:40px">' . $value['qty'] . '</td>
+                    <td style="font-size:8px;width:70px">PHP ' . $value['salvalue'] . '</td>
+                    <td style="font-size:8px;width: 70px;">PHP ' . $value['monthlydep'] . '</td>
+                    <td style="font-size:8px;width: 70px;">PHP ' . $value['annualdep'] . '</td>
+                    <td style="font-size:8px;">' . $value['name'] . '</td>
                 </tr>';
 }
 
+
+$html .= '<tr><td colspan="9" style="border-top: .5px solid grey"></td><td style="font-size:8px;border-top: .5px solid grey">PHP ' . number_format($totalCost) . '</td><td style="font-size:8px;border-top: .5px solid grey">' . $totalQty . 'pcs</td><td style="font-size:8px;border-top: .5px solid grey">PHP ' . number_format($totalSalvageValue) . '</td><td style="font-size:8px;border-top: .5px solid grey">PHP ' . number_format($totalMonthly) . '</td><td style="font-size:8px;border-top: .5px solid grey">PHP ' . number_format($totalAnnual) . '</td><td style="font-size:8px;border-top: .5px solid grey"></td></tr>';
 $html .= '   </tbody>
         </table>';
 

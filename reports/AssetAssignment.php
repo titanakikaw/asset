@@ -32,10 +32,10 @@ class MYPDF extends TCPDF
     {
         $html = '<table cellspacing="0" cellpadding="0" style="width:100%">
                     <tr>
-                        <td colspan="9"><h1>' . $this->company . '</h1></td>
+                        <td colspan="10"><h1>' . $this->company . '</h1></td>
                     </tr>
                     <tr>
-                        <td colspan="9"><h5>Fixed Asset by Employee</h5></td>
+                        <td colspan="10"><h5>Fixed Asset by Assigned Employee</h5></td>
                     </tr>
                     <tr>
                         <td><p style="font-size:7px;">DATE PRINTED :</p></td>
@@ -47,8 +47,10 @@ class MYPDF extends TCPDF
                         <td></td>
                         <td></td>
                         <td></td>
+                        <td></td>
                     </tr>
                     <tr>    
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -68,6 +70,7 @@ class MYPDF extends TCPDF
                         <td style="font-size:7px; border-bottom: 1px solid black">Serial No.</td>
                         <td style="font-size:7px; border-bottom: 1px solid black">Model No.</td>
                         <td style="font-size:7px; border-bottom: 1px solid black">Cost</td>
+                        <td style="font-size:7px; border-bottom: 1px solid black">Qty</td>
                         <td style="font-size:7px; border-bottom: 1px solid black">Months</td>
                     </tr>
                 </table>';
@@ -85,33 +88,47 @@ $pdf->setPrintHeader(true);
 $pdf->AddPage('L', 'LETTER');
 $pdf->SetFont("", "", 7);
 
-
 $content = "";
 $clsController = new clsController('', '');
-$query = "SELECT * from emp_asset_assigned as a INNER JOIN employee as b on a.empno = b.empno where status = 'Assigned'";
+$query = "SELECT * from emp_asset_assigned as a INNER JOIN employee as b on a.empno = b.empno where status = 'Assigned' group by a.empno";
 $Employees = $clsController->fullcustom($query);
-foreach ($Employees as $key => $employee) {
-    $name = $employee['lname'] . ', ' . $employee['fname'] . ' ' . $employee['mi'];
-    $content = "<tr>";
-    $content .= '<td colspan="9" style ="font-weight:bold;font-size:8px;">' . strtoupper($name) . '</td>';
-    $content .= "</tr>";
-    $content .= "<tr>";
 
-    $clsController = new clsController('', '');
-    $query = "SELECT * from assets where assetno=?";
-    $assets = $clsController->list_custom($query, [$employee['assetno']]);
-    foreach ($assets as $key => $asset) {
-        $content .= "<td>" . $asset['assetno'] . "</td>";
-        $content .= '<td>' . $asset['description'] . '</td>';
-        $content .= "<td>" . $asset['cat_code'] . "</td>";
-        $content .= "<td>" . $asset['dept_code'] . "</td>";
-        $content .= "<td>" . $asset['loc_code'] . "</td>";
-        $content .= "<td>" . $asset['serialno'] . "</td>";
-        $content .= "<td>" . $asset['modelno'] . "</td>";
-        $content .= "<td>Php " . number_format($asset['cost']) . "</td>";
-        $content .= "<td>" . $asset['usefullife'] . "</td>";
+
+foreach ($Employees as $key => $employee) {
+    if ($content != '') {
+        $content .= "<tr></tr>";
     }
+    $TotalAssetCost = 0;
+    $TotalQty = 0;
+    $name = $employee['lname'] . ', ' . $employee['fname'] . ' ' . $employee['mi'];
+    $content .= "<tr>";
+    $content .= '<td colspan="10" style ="font-weight:bold;font-size:8px;">' . strtoupper($name) . '</td>';
     $content .= "</tr>";
+    $clsController = new clsController('', '');
+    $query2 = "SELECT * from emp_asset_assigned where status = 'Assigned' and empno = '" . $employee['empno'] . "'";
+    $Employees2 = $clsController->fullcustom($query2);
+    foreach ($Employees2 as $key => $value) {
+        $clsController = new clsController('', '');
+        $query = "SELECT * from assets where assetno=?";
+        $assets = $clsController->list_custom($query, [$value['assetno']]);
+        foreach ($assets as $key => $asset) {
+            $TotalAssetCost += $asset['cost'];
+            $TotalQty += $asset['qty'];
+            $content .= "<tr>";
+            $content .= "<td>" . $asset['assetno'] . "</td>";
+            $content .= '<td>' . $asset['description'] . '</td>';
+            $content .= "<td>" . $asset['cat_code'] . "</td>";
+            $content .= "<td>" . $asset['dept_code'] . "</td>";
+            $content .= "<td>" . $asset['loc_code'] . "</td>";
+            $content .= "<td>" . $asset['serialno'] . "</td>";
+            $content .= "<td>" . $asset['modelno'] . "</td>";
+            $content .= "<td>Php " . number_format($asset['cost']) . "</td>";
+            $content .= "<td>" . $asset['qty'] . "</td>";
+            $content .= "<td>" . $asset['usefullife'] . "</td>";
+            $content .= "</tr>";
+        }
+    }
+    $content .= '<tr ><td colspan="7" style="border-top:.1px solid grey"></td><td  style="border-top:.1px solid grey">PHP ' . number_format($TotalAssetCost) . '</td><td colspan="2" style="border-top:.1px solid grey">' . $TotalQty . '</td></tr>';
 }
 $html = '<table cellspacing="" cellpadding="1" style="width:100%">
             <tbody>';

@@ -254,6 +254,7 @@ class clsController
         $stmt = $conn->prepare($query);
         $stmt->execute();
         $data = $stmt->fetchAll();
+        // var_dump($data);
         return $data;
     }
     function getTop()
