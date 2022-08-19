@@ -1,6 +1,6 @@
 <?php
 require('../static_components/header.php');
-
+$stat_auto = '';
 
 if ($settings['asset_auto'] != 0) {
     $asset_auto = 'checked';

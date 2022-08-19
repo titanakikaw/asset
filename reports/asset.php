@@ -129,8 +129,6 @@ if ($condition != '') {
 
 $assetData = array();
 $query = "SELECT a.* , b.description as status, c.description as cat_code, d.description as dept_code from assets as a INNER JOIN status as b on a.status_code = b.status_code INNER JOIN category as c on a.cat_code = c.cat_code INNER JOIN department as d on a.dept_code = d.dept_code $condition";
-// var_dump($query);
-// die();
 $clsController = new clsController('', '');
 $assetData = $clsController->list_custom($query, []);
 foreach ($assetData as $key => $value) {
@@ -140,7 +138,6 @@ foreach ($assetData as $key => $value) {
         $assetData[$key]['name'] = $assignedData[0]['name'];
     }
 }
-
 
 $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 $pdf->setParameter('', $xdata["cat_code_from"], $xdata["cat_code_to"], $xdata["dept_code_from"], $xdata["dept_code_to"]);
@@ -183,9 +180,9 @@ foreach ($assetData as $key => $value) {
                     <td style="font-size:8px;width:50px">' . $value['usefullife'] . '</td>
                     <td style="font-size:8px;width:70px">PHP ' . number_format($value['cost']) . '</td>
                     <td style="font-size:8px;width:40px">' . $value['qty'] . '</td>
-                    <td style="font-size:8px;width:70px">PHP ' . $value['salvalue'] . '</td>
-                    <td style="font-size:8px;width: 70px;">PHP ' . $value['monthlydep'] . '</td>
-                    <td style="font-size:8px;width: 70px;">PHP ' . $value['annualdep'] . '</td>
+                    <td style="font-size:8px;width:70px">PHP ' . number_format($value['salvalue']) . '</td>
+                    <td style="font-size:8px;width: 70px;">PHP ' . number_format($value['monthlydep']) . '</td>
+                    <td style="font-size:8px;width: 70px;">PHP ' . number_format($value['annualdep']) . '</td>
                     <td style="font-size:8px;">' . $value['name'] . '</td>
                 </tr>';
 }

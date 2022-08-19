@@ -1,9 +1,15 @@
 <?php
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
+// require('./AUTO_GEN.php');
+// die();
+// require('../static_components/AUTO_GEN.php');
+require('../model/clsConnection.php');
+require '../model/clsStandard.php';
+$clsController = new clsController('', 'settings');
+$settings = $clsController->viewlist();
+$settings  = $settings[0];
 
-
-require('../static_components/AUTO_GEN.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
