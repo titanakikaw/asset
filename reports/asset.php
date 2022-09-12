@@ -2,6 +2,12 @@
 require('../tcpdflibrary/tcpdf.php');
 require('../model/clsConnection.php');
 require('../model/clsStandard.php');
+
+
+
+
+
+
 class MYPDF extends TCPDF
 {
     private $company = 'Company Name';
@@ -127,6 +133,13 @@ if ($condition != '') {
 }
 
 
+//Company Settings
+$clsController = new clsController('', 'settings');
+$settings = $clsController->viewlist();
+$settings = $settings['0'];
+
+
+
 $assetData = array();
 $query = "SELECT a.* , b.description as status, c.description as cat_code, d.description as dept_code from assets as a INNER JOIN status as b on a.status_code = b.status_code INNER JOIN category as c on a.cat_code = c.cat_code INNER JOIN department as d on a.dept_code = d.dept_code $condition";
 $clsController = new clsController('', '');
@@ -139,8 +152,10 @@ foreach ($assetData as $key => $value) {
     }
 }
 
+
+
 $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-$pdf->setParameter('', $xdata["cat_code_from"], $xdata["cat_code_to"], $xdata["dept_code_from"], $xdata["dept_code_to"]);
+$pdf->setParameter($settings['Company'], $xdata["cat_code_from"], $xdata["cat_code_to"], $xdata["dept_code_from"], $xdata["dept_code_to"]);
 $pdf->SetHeaderMargin(4);
 $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 $pdf->setAutoPageBreak(true, 23);

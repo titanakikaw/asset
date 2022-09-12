@@ -2,6 +2,7 @@
 require('../tcpdflibrary/tcpdf.php');
 require('../model/clsConnection.php');
 require('../model/clsStandard.php');
+
 class MYPDF extends TCPDF
 {
     private $company = 'Company Name';
@@ -81,8 +82,13 @@ class MYPDF extends TCPDF
 }
 
 
+//Company Settings
+$clsController = new clsController('', 'settings');
+$settings = $clsController->viewlist();
+$settings = $settings['0'];
+
 $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-$pdf->setParameter('', '', '', '', '', '');
+$pdf->setParameter($settings['Company'], '', '', '', '', '');
 $pdf->SetHeaderMargin(2);
 $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 $pdf->setAutoPageBreak(true, 23);
@@ -90,8 +96,6 @@ $pdf->SetMargins(5, 40, 5);
 $pdf->setPrintHeader(true);
 // $pdf->SetFooterMargin(20);
 $pdf->AddPage('L', 'LEGAL');
-
-
 
 
 $asset = [];

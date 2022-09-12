@@ -7,8 +7,6 @@ function DateRender($start, $end, $count)
    $data = [];
    $data['year'] = [];
    $data['month'] = [];
-   $data['month'] = [];
-   echo '<pre>';
    foreach ($diff_types as $key => $value) {
       $diff_ctr = "P" . $count . $value;
       $rendered = new DatePeriod(
@@ -21,11 +19,11 @@ function DateRender($start, $end, $count)
             case 'Y':
                array_push($data['year'], $value2->format('Y'));
             case 'M':
-               array_push($data['month'], $value2->format('M'));
+               array_push($data['month'], $value2->format('Y-M'));
             default:
                // array_push($data, $value2->format('Y-m-d'));
          }
       }
    }
-   var_dump($data);
+   return $data
 }
