@@ -44,6 +44,5 @@
                 <a href="assets.php" style="display:flex; justify-content:space-between"><i class="fa-solid fa-power-off"></i>&nbsp; Exit</a>
             </li>
         </ul>
-
     </div>
 </div>

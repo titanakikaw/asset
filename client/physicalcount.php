@@ -35,7 +35,7 @@ if ($settings['phc_auto'] == 1) {
             <div class="d-grid gap-2 d-md-flex justify-content-md-start table-actions">
                 <button class="btn" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" style="border-radius: 2px; background-color:#f3f3f3"><i class="fa-solid fa-plus"></i> &nbsp; New Count</button>
                 <button class="btn" type="button" style="border-radius: 2px; background-color:#f3f3f3" onclick="edit()"><i class="fa-solid fa-pencil"></i> &nbsp; Edit Count</button>
-                <button class="btn" type="button" style="border-radius: 2px; background-color:#f3f3f3"><i class="fa-solid fa-trash"></i> &nbsp; Delete Count</button>
+                <button class="btn" type="button" style="border-radius: 2px; background-color:#f3f3f3" onclick="deleteData('tbldata')"><i class="fa-solid fa-trash"></i> &nbsp; Delete Count</button>
             </div>
         </div>
         <div class="col-6">
@@ -43,7 +43,7 @@ if ($settings['phc_auto'] == 1) {
         </div>
         <div class="col-2">
             <div class="d-grid gap-2 d-md-flex justify-content-md-end" style="width: 100%;">
-                <button class="btn btn-primary me-md-2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" type="button" style="width: 100%;">Filter Search</button>
+                <!-- <button class="btn btn-primary me-md-2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" type="button" style="width: 100%;">Filter Search</button> -->
             </div>
         </div>
     </div>
@@ -379,6 +379,36 @@ require('../static_components/footer.php');
             alertify.error("Please select a asset")
         } else if (getCheckedValues("tbldata").length > 1) {
             alertify.error("One asset only should be selected")
+        }
+    }
+
+
+    async function deleteData(datacheckboxes) {
+        const tbldata = document.querySelectorAll(`#${datacheckboxes}`)
+        let data = '';
+        tbldata.forEach((input) => {
+            if (input.checked) {
+                if (data != '') {
+                    data += ',';
+                }
+                data += input.value
+            }
+        })
+
+        if (data.length != 0) {
+            $.ajax({
+                url: "../clsController/physicalcount.php",
+                type: "POST",
+                data: 'data=' + data + '&action=delete',
+                error: (error) => {
+                    console.log(error)
+                },
+                success: (data) => {
+
+                    alertify.success('Success').delay(1);
+                    $('.phc-table').DataTable().ajax.reload();
+                }
+            })
         }
     }
 

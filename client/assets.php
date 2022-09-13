@@ -15,7 +15,7 @@ require('../static_components/header.php');
         </div>
         <div class="col-2">
             <div class="d-grid gap-2 d-md-flex justify-content-md-end" style="width: 100%;">
-                <button class="btn btn-primary me-md-2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" type="button" style="width: 100%;">Filter Search</button>
+                <!-- <button class="btn btn-primary me-md-2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" type="button" style="width: 100%;">Filter Search</button> -->
             </div>
         </div>
     </div>

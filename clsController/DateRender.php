@@ -25,5 +25,5 @@ function DateRender($start, $end, $count)
          }
       }
    }
-   return $data
+   return $data;
 }

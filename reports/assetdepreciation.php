@@ -5,7 +5,8 @@ require('../model/clsConnection.php');
 require('../model/clsStandard.php');
 require('../clsController/DateRender.php');
 
-DateRender('2016-06-06', '2021-06-06', '1');
+echo '<pre>';
+var_dump(DateRender('2016-06-06', '2021-06-06', '1'));
 die();
 
 $clsController = new clsController('', '');
@@ -15,25 +16,25 @@ $stmt = $clsController->list_custom($query, []);
 $date = new DateTime('2016-06-06'); // Y-m-d
 $date->add(new DateInterval('P60M'));
 
-$renderedMontns = new DatePeriod(
-    new DateTime('2016-06-06'),
-    new DateInterval('P1M'),
-    new DateTime('2021-06-06')
-);
-$renderedYears = new DatePeriod(
-    new DateTime('2016-06-06'),
-    new DateInterval('P1Y'),
-    new DateTime('2021-06-06')
-);
+// $renderedMontns = new DatePeriod(
+//     new DateTime('2016-06-06'),
+//     new DateInterval('P1M'),
+//     new DateTime('2021-06-06')
+// );
+// $renderedYears = new DatePeriod(
+//     new DateTime('2016-06-06'),
+//     new DateInterval('P1Y'),
+//     new DateTime('2021-06-06')
+// );
 
 
 
 
 
-$depriDates = [];
-foreach ($renderedYears as $key => $value) {
-    array_push($depriDates, $value->format('Y-m-d'));
-}
+// $depriDates = [];
+// foreach ($renderedYears as $key => $value) {
+//     array_push($depriDates, $value->format('Y-m-d'));
+// }
 echo '<pre>';
 var_dump($depriDates);
 die();

@@ -155,16 +155,17 @@ class clsController
 
     function delete()
     {
+        $clsConnection = new dbConnection();
+        $conn = $clsConnection->conn();
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         try {
-            $clsConnection = new dbConnection();
-            $conn = $clsConnection->conn();
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $query = "DELETE from `$this->table` where $this->columns=?";
             $stmt = $conn->prepare($query);
             $stmt->execute($this->data);
             return true;
         } catch (\Throwable $th) {
             var_dump($th);
+            die();
             return false;
         }
     }

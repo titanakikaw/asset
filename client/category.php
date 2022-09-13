@@ -14,7 +14,7 @@ if ($settings['cat_auto'] == 1) {
             <div class="d-grid gap-2 d-md-flex justify-content-md-start table-actions">
                 <button data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn" type="button" style="border-radius: 2px; background-color:#f3f3f3"><i class="fa-solid fa-plus"></i> &nbsp; New Category</button>
                 <button class="btn" type="button" style="border-radius: 2px; background-color:#f3f3f3"><i class="fa-solid fa-pencil"></i> &nbsp; Edit Category</button>
-                <button class="btn" type="button" style="border-radius: 2px; background-color:#f3f3f3"><i class="fa-solid fa-trash"></i> &nbsp; Delete Category</button>
+                <button class="btn" type="button" style="border-radius: 2px; background-color:#f3f3f3" onclick="deleteData('tbldata')"><i class="fa-solid fa-trash"></i> &nbsp; Delete Category</button>
             </div>
         </div>
 
@@ -132,5 +132,34 @@ require('../static_components/footer.php');
                 alertify.success('Success').delay(1);
             }
         })
+    }
+
+    async function deleteData(datacheckboxes) {
+        const tbldata = document.querySelectorAll(`#${datacheckboxes}`)
+        let data = '';
+        tbldata.forEach((input) => {
+            if (input.checked) {
+                if (data != '') {
+                    data += ',';
+                }
+                data += input.value
+            }
+        })
+
+        if (data.length != 0) {
+            $.ajax({
+                url: "../clsController/category.php",
+                type: "POST",
+                data: 'data=' + data + '&action=delete',
+                error: (error) => {
+                    console.log(error)
+                },
+                success: (data) => {
+
+                    alertify.success('Success').delay(1);
+                    $('.asset-table').DataTable().ajax.reload();
+                }
+            })
+        }
     }
 </script>

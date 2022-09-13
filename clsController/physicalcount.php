@@ -31,8 +31,8 @@ switch ($_POST['action']) {
     case 'delete':
         $data = explode(',', $_POST['data']);
         foreach ($data as $key => $value) {
-            $xdata['dept_code'] = $value;
-            $clsController = new clsController($xdata, 'category');
+            $xdata['phc_code'] = $value;
+            $clsController = new clsController($xdata, 'asset_physical_count');
             $clsController->delete();
         }
         break;
